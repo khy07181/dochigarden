@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cloister — Press Kit</title>
+<meta name="description" content="Press & media kit for Cloister, a quiet, native focus timer for macOS. Copy, screenshots, app icon, and brand assets to download.">
+<meta name="theme-color" content="#0C1F15">
+<meta property="og:title" content="Cloister — Press Kit">
+<meta property="og:description" content="Copy, screenshots, and brand assets for Cloister, a quiet native focus timer for macOS.">
+<meta property="og:image" content="https://dochigarden.com/cloister/og.png">
+<meta property="og:url" content="https://dochigarden.com/cloister/press/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Crect x='1' y='1' width='24' height='24' rx='7' fill='%2322432F'/%3E%3Ccircle cx='13' cy='13' r='6.4' fill='%232F5C3E'/%3E%3Cpath d='M13 5.6 A7.4 7.4 0 1 1 5.6 13' fill='none' stroke='%23E7C878' stroke-width='1.8' stroke-linecap='round'/%3E%3Ccircle cx='13' cy='5.6' r='1.2' fill='%23F4E4B8'/%3E%3C/svg%3E">
+<style>
+  *{margin:0;box-sizing:border-box}
+  :root{
+    --bg:#0C1F15; --panel:#122a1d; --panel-2:#163526; --line:rgba(237,230,214,.12);
+    --ink:#EDE6D6; --dim:#C9C3B2; --muted:#9AA79A;
+    --gold:#E7C878; --gold-2:#C79A38; --emer:#2F5C3E;
+    --serif:ui-serif,"New York","Iowan Old Style",Palatino,Georgia,serif;
+    --sans:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,monospace;
+  }
+  html,body{min-height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(120% 60% at 50% -10%, #14351f 0%, var(--bg) 60%);}
+  a{color:var(--gold)}
+  .wrap{max-width:900px;margin:0 auto;padding:0 24px}
+
+  header.bar{border-bottom:1px solid var(--line)}
+  .bar .in{display:flex;align-items:center;justify-content:space-between;height:64px;max-width:900px;margin:0 auto;padding:0 24px}
+  .home{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-family:var(--serif);font-weight:600;font-size:19px}
+  .home svg{width:26px;height:26px}
+  .chip{font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-2);border:1px solid var(--line);border-radius:999px;padding:3px 9px;margin-left:4px}
+  .back{color:var(--gold);text-decoration:none;font-size:14px;font-weight:600}
+
+  .hero{text-align:center;padding:64px 0 30px}
+  .hero img.icon{width:112px;height:112px;border-radius:24px;box-shadow:0 18px 50px rgba(0,0,0,.45);}
+  h1{font-family:var(--serif);font-size:clamp(38px,7vw,60px);font-weight:600;letter-spacing:-.02em;line-height:1.02;margin:22px 0 6px}
+  .tagline{font-family:var(--serif);font-style:italic;color:var(--gold);font-size:clamp(18px,3vw,23px);margin-bottom:14px}
+  .lede{color:var(--dim);max-width:620px;margin:0 auto;font-size:17px}
+
+  section{padding:34px 0;border-top:1px solid var(--line)}
+  h2{font-family:var(--serif);font-size:24px;font-weight:600;letter-spacing:-.01em;margin-bottom:16px}
+  h3{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;font-weight:600}
+  p{color:var(--dim)}
+  p+p{margin-top:12px}
+
+  .facts{display:grid;grid-template-columns:150px 1fr;gap:10px 20px;font-size:15px}
+  .facts dt{color:var(--muted)}
+  .facts dd{color:var(--ink)}
+  .facts a{word-break:break-word}
+
+  .copyblock{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 46px 16px 16px;margin:10px 0}
+  .copyblock+.copyblock{margin-top:14px}
+  .copyblock .t{color:var(--ink);font-size:15.5px}
+  .copyblock.mono .t{font-family:var(--mono);font-size:13.5px;color:var(--gold)}
+  .copybtn{position:absolute;top:10px;right:10px;background:transparent;border:1px solid var(--line);color:var(--dim);border-radius:7px;padding:4px 9px;font-size:12px;font-family:var(--sans);cursor:pointer}
+  .copybtn:hover{color:var(--ink);border-color:var(--gold-2)}
+  .copybtn.ok{color:#7FCf9A;border-color:#3E7A52}
+
+  ul.feat{list-style:none;display:grid;gap:10px}
+  ul.feat li{position:relative;padding-left:26px;color:var(--dim)}
+  ul.feat li::before{content:"";position:absolute;left:2px;top:9px;width:8px;height:8px;border-radius:2px;background:var(--gold-2)}
+  ul.feat li b{color:var(--ink);font-weight:600}
+
+  blockquote{font-family:var(--serif);font-size:20px;line-height:1.5;color:var(--ink);border-left:3px solid var(--gold-2);padding-left:18px;margin:2px 0}
+
+  .tiers{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .tier{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .tier .name{font-family:var(--serif);font-size:18px;color:var(--ink);margin-bottom:2px}
+  .tier .price{font-size:15px;color:var(--gold);margin-bottom:8px}
+  .tier p{font-size:14px}
+
+  .assets{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .asset{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+  .asset .thumb{background:#0d2318;display:flex;align-items:center;justify-content:center;padding:16px;min-height:150px}
+  .asset .thumb img{max-width:100%;max-height:190px;border-radius:8px;display:block}
+  .asset .thumb.icon img{width:96px;height:96px;border-radius:20px;box-shadow:0 10px 26px rgba(0,0,0,.4)}
+  .asset .meta{padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--line)}
+  .asset .meta .lbl{font-size:14px;color:var(--ink)}
+  .asset .meta .sub{font-size:12px;color:var(--muted)}
+  .dl{white-space:nowrap;text-decoration:none;color:var(--bg);background:var(--gold);font-weight:600;font-size:13px;border-radius:8px;padding:7px 12px}
+  .dl:hover{background:#f0d488}
+  .dl.ghost{background:transparent;color:var(--gold);border:1px solid var(--gold-2)}
+  .dlall{display:inline-block;margin-top:16px}
+
+  footer.foot{border-top:1px solid var(--line);margin-top:10px}
+  .foot .in{max-width:900px;margin:0 auto;padding:24px;display:flex;flex-wrap:wrap;gap:10px 20px;justify-content:space-between;align-items:center;color:var(--muted);font-size:13.5px}
+  .foot nav{display:flex;gap:16px;flex-wrap:wrap}
+  .foot a{color:var(--muted);text-decoration:none}
+  .foot a:hover{color:var(--gold)}
+
+  @media(max-width:640px){
+    .facts{grid-template-columns:1fr;gap:2px 0}
+    .facts dt{margin-top:10px}
+    .tiers,.assets{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<header class="bar"><div class="in">
+  <a class="home" href="/cloister/">
+    <svg viewBox="0 0 26 26" aria-hidden="true"><rect x="1" y="1" width="24" height="24" rx="7" fill="#22432F"/><circle cx="13" cy="13" r="6.4" fill="#2F5C3E"/><circle cx="13" cy="13" r="7.4" fill="none" stroke="#EDE6D6" stroke-width="1.1" opacity=".5"/><path d="M13 5.6 A7.4 7.4 0 1 1 5.6 13" fill="none" stroke="#E7C878" stroke-width="1.6" stroke-linecap="round"/><circle cx="13" cy="5.6" r="1" fill="#F4E4B8"/></svg>
+    Cloister <span class="chip">Press Kit</span>
+  </a>
+  <a class="back" href="/cloister/">← Back to Cloister</a>
+</div></header>
+
+<main>
+  <div class="wrap">
+    <div class="hero">
+      <img class="icon" src="/cloister/press/assets/cloister-icon-1024.png" alt="Cloister app icon">
+      <h1>Cloister</h1>
+      <div class="tagline">A quiet, native focus timer for your Mac's menu bar.</div>
+      <p class="lede">Everything you need to write about or list Cloister — copy, screenshots, and brand assets, ready to grab. Questions? <a href="mailto:support@dochigarden.com">support@dochigarden.com</a></p>
+    </div>
+
+    <section>
+      <h2>At a glance</h2>
+      <dl class="facts">
+        <dt>Name</dt><dd>Cloister</dd>
+        <dt>What it is</dt><dd>A native focus timer for macOS that lives in the menu bar</dd>
+        <dt>Platform</dt><dd>macOS 15 (Sequoia) or later · Apple Silicon &amp; Intel</dd>
+        <dt>Price</dt><dd>Free · Cloister Pro $19.99 one-time (lifetime, no subscription)</dd>
+        <dt>Availability</dt><dd>Homebrew or notarized DMG · automatic updates</dd>
+        <dt>Maker</dt><dd>Dochi (도치), an independent developer in South Korea</dd>
+        <dt>Website</dt><dd><a href="https://dochigarden.com/cloister/">dochigarden.com/cloister</a></dd>
+        <dt>Contact</dt><dd><a href="mailto:support@dochigarden.com">support@dochigarden.com</a></dd>
+      </dl>
+    </section>
+
+    <section>
+      <h2>Descriptions</h2>
+      <h3>Tagline</h3>
+      <div class="copyblock"><button class="copybtn" type="button">Copy</button><div class="t">A quiet, native focus timer for your Mac's menu bar.</div></div>
+      <h3 style="margin-top:20px">Short</h3>
+      <div class="copyblock"><button class="copybtn" type="button">Copy</button><div class="t">Cloister is a calm, native focus timer that lives in your Mac's menu bar. Start a session, let the golden ring close, and watch your focused hours stack up — kept on your device, with no account and no cloud.</div></div>
+      <h3 style="margin-top:20px">Long</h3>
+      <div class="copyblock"><button class="copybtn" type="button">Copy</button><div class="t">Cloister is a focus timer for macOS, made for people who want to concentrate and keep a record of it — without the noise. Most timers are either a bare stopwatch or a tracker buried under tags, projects, and to-dos. Cloister sits in between: start a focus session from the menu bar, take the break as a real part of the cycle, and each completed round stacks up into streaks, a year-long heatmap, and a quiet ledger of your focused hours. Everything stays on your Mac — no account, no cloud, no analytics. It's a small, deliberate app built to be used for a long time: native SwiftUI, notarized, and self-distributed with automatic updates.</div></div>
+    </section>
+
+    <section>
+      <h2>Key features</h2>
+      <ul class="feat">
+        <li>Menu-bar focus timer with a golden progress ring — start, pause, and break without leaving your work</li>
+        <li>Focus + Break as one intentional cycle — a completed round is a <b>"Stack"</b></li>
+        <li>Streaks, daily goals, and a <b>full-year focus heatmap</b></li>
+        <li><b>Insights</b>: focus trends, weekly comparison, lifetime totals</li>
+        <li><b>100% local</b> — stored on your Mac, no account, no cloud, no trackers</li>
+        <li>Native macOS (SwiftUI), light &amp; dark, keyboard shortcuts</li>
+        <li>Optional <b>iCloud sync</b> across your own Macs (Pro)</li>
+        <li>Notarized, installable via Homebrew or DMG, with automatic updates</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>In the maker's words</h2>
+      <blockquote>Cloister came from wanting a focus timer that was neither too simple nor too complex — one that treats rest as part of the cycle and quietly records the work, so that consistency becomes something you can see.</blockquote>
+    </section>
+
+    <section>
+      <h2>Pricing</h2>
+      <div class="tiers">
+        <div class="tier"><div class="name">Free</div><div class="price">$0</div><p>The complete timer, forever. No time limits, no account.</p></div>
+        <div class="tier"><div class="name">Cloister Pro</div><div class="price">$19.99 · one-time, lifetime</div><p>No subscription. Unlocks full history, unlimited presets, data export (CSV · JSON), and iCloud sync.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Assets</h2>
+      <p style="margin-bottom:16px">Free to use when writing about Cloister. Please don't alter the app icon.</p>
+      <div class="assets">
+        <div class="asset">
+          <div class="thumb icon"><img src="/cloister/press/assets/cloister-icon-1024.png" alt="Cloister app icon"></div>
+          <div class="meta"><div><div class="lbl">App icon</div><div class="sub">PNG · 1024×1024</div></div><a class="dl" href="/cloister/press/assets/cloister-icon-1024.png" download>Download</a></div>
+        </div>
+        <div class="asset">
+          <div class="thumb"><img src="/cloister/images/insights-light.png" alt="Cloister Insights, light"></div>
+          <div class="meta"><div><div class="lbl">Insights — light</div><div class="sub">PNG</div></div><a class="dl" href="/cloister/images/insights-light.png" download>Download</a></div>
+        </div>
+        <div class="asset">
+          <div class="thumb"><img src="/cloister/images/insights-dark.png" alt="Cloister Insights, dark"></div>
+          <div class="meta"><div><div class="lbl">Insights — dark</div><div class="sub">PNG</div></div><a class="dl" href="/cloister/images/insights-dark.png" download>Download</a></div>
+        </div>
+        <div class="asset">
+          <div class="thumb"><img src="/cloister/og.png" alt="Cloister social banner"></div>
+          <div class="meta"><div><div class="lbl">Social banner</div><div class="sub">PNG · 1200×630</div></div><a class="dl" href="/cloister/og.png" download>Download</a></div>
+        </div>
+      </div>
+      <a class="dl dlall" href="/cloister/press/assets/cloister-press-assets.zip" download>⬇ Download all assets (.zip)</a>
+    </section>
+
+    <section>
+      <h2>Boilerplate</h2>
+      <p style="margin-bottom:10px">A short "about" blurb to drop at the end of an article:</p>
+      <div class="copyblock mono"><button class="copybtn" type="button">Copy</button><div class="t">Cloister is a quiet, native focus timer for macOS that lives in your menu bar and keeps a private ledger of your focused hours. Free to use, with a one-time Pro upgrade. Made by the independent developer Dochi. https://dochigarden.com/cloister/</div></div>
+    </section>
+
+    <section>
+      <h2>Links</h2>
+      <dl class="facts">
+        <dt>Website</dt><dd><a href="https://dochigarden.com/cloister/">dochigarden.com/cloister</a></dd>
+        <dt>Download</dt><dd><a href="https://dochigarden.com/cloister/#install">dochigarden.com/cloister/#install</a></dd>
+        <dt>Privacy</dt><dd><a href="/cloister/privacy/">/cloister/privacy</a></dd>
+        <dt>Terms</dt><dd><a href="/cloister/terms/">/cloister/terms</a></dd>
+        <dt>Refund</dt><dd><a href="/cloister/refund/">/cloister/refund</a></dd>
+        <dt>Contact</dt><dd><a href="mailto:support@dochigarden.com">support@dochigarden.com</a></dd>
+      </dl>
+    </section>
+  </div>
+</main>
+
+<footer class="foot"><div class="in">
+  <nav><a href="/cloister/">Cloister</a><a href="/cloister/privacy/">Privacy</a><a href="/cloister/terms/">Terms</a><a href="/cloister/refund/">Refund</a><a href="mailto:support@dochigarden.com">Support</a></nav>
+  <span>© 2026 Dochi (도치)</span>
+</div></footer>
+
+<script>
+  document.querySelectorAll('.copyblock').forEach(function(block){
+    var btn = block.querySelector('.copybtn');
+    var text = block.querySelector('.t').textContent.trim();
+    btn.addEventListener('click', function(){
+      navigator.clipboard.writeText(text).then(function(){
+        var old = btn.textContent; btn.textContent = 'Copied'; btn.classList.add('ok');
+        setTimeout(function(){ btn.textContent = old; btn.classList.remove('ok'); }, 1400);
+      }).catch(function(){});
+    });
+  });
+</script>
+</body>
+</html>
