@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cloister — A quiet cloister for focused work</title>
+<meta name="description" content="Cloister is a calm, native focus timer for macOS — a quiet menu-bar app, built on the Pomodoro rhythm, that stacks your focused hours into streaks and a year-long heatmap and keeps every session on your Mac. Free to use — Pro is a one-time purchase.">
+<meta name="theme-color" content="#0C1F15" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#EDE6D6" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Crect x='1' y='1' width='24' height='24' rx='7' fill='%2322432F'/%3E%3Ccircle cx='13' cy='13' r='6.4' fill='%232F5C3E'/%3E%3Ccircle cx='13' cy='13' r='7.4' fill='none' stroke='%23EDE6D6' stroke-width='1' opacity='.5'/%3E%3Cpath d='M13 5.6 A7.4 7.4 0 1 1 5.6 13' fill='none' stroke='%23E7C878' stroke-width='1.8' stroke-linecap='round'/%3E%3Ccircle cx='13' cy='5.6' r='1.2' fill='%23F4E4B8'/%3E%3C/svg%3E">
+<link rel="canonical" href="https://dochigarden.com/cloister/">
+<!-- Social preview (og.png is web/og.png, 1200×630) -->
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Cloister">
+<meta property="og:title" content="Cloister — A quiet focus timer for macOS">
+<meta property="og:description" content="A calm, native menu-bar focus timer for macOS. Focus, stacked — your hours kept like a ledger. Free, with a one-time Pro.">
+<meta property="og:url" content="https://dochigarden.com/cloister/">
+<meta property="og:image" content="https://dochigarden.com/cloister/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Cloister — a calm macOS focus timer">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cloister — A quiet focus timer for macOS">
+<meta name="twitter:description" content="A calm, native menu-bar focus timer for macOS. Focus, stacked. Free, with a one-time Pro.">
+<meta name="twitter:image" content="https://dochigarden.com/cloister/og.png">
+<style>
+  :root{
+    --garth-900:#0C1F15; --garth-800:#10281B; --garth-700:#163526;
+    --garth-600:#1E4531; --line:#2A4A38;
+    --moss:#7BA487; --sage:#A7C6B2;
+    --gold-500:#CBA24E; --gold-300:#E7C878; --gold-100:#F4E4B8;
+    --parchment:#EDE6D6; --parchment-2:#E3DAC4; --ink:#16271D;
+    --serif:ui-serif,"New York","Iowan Old Style",Palatino,Georgia,serif;
+    --sans:-apple-system,BlinkMacSystemFont,ui-sans-serif,"SF Pro Text",system-ui,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,monospace;
+    --wrap:1080px;
+  }
+  html[data-theme="light"]{
+    color-scheme:light;
+    --garth-900:#F0EADB; --garth-800:#FBF7EC; --garth-700:#F5EFE0;
+    --garth-600:#EDE5D1; --line:#DED2B6;
+    --moss:#6E7E6F; --sage:#46564A;
+    --gold-500:#B0862F; --gold-300:#C79A38; --gold-100:#8A6A22;
+    --parchment:#18271D; --parchment-2:#24332A; --ink:#16271D;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth; color-scheme:dark;}
+  body{
+    margin:0; background:var(--garth-900); color:var(--parchment);
+    font-family:var(--sans); font-size:17px; line-height:1.6;
+    -webkit-font-smoothing:antialiased; letter-spacing:.005em;
+  }
+  h1,h2,h3{font-family:var(--serif); font-weight:600; line-height:1.08; text-wrap:balance; margin:0;}
+  p{margin:0;}
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:var(--wrap); margin:0 auto; padding:0 28px;}
+  .eyebrow{
+    font-family:var(--sans); font-size:12.5px; font-weight:600;
+    letter-spacing:.16em; text-transform:uppercase; color:var(--gold-500);
+  }
+  .lede{color:var(--sage); font-size:19px; max-width:60ch;}
+  .section{padding:104px 0; position:relative;}
+  .founder .note{margin-top:30px; display:flex; flex-direction:column; gap:22px; max-width:64ch;}
+  .founder .note p{color:var(--sage); font-size:18.5px; line-height:1.78;}
+  .founder .note p em{color:var(--gold-300); font-style:italic; font-family:var(--serif);}
+  .install .dl-row{display:flex; align-items:center; gap:14px 20px; margin-top:22px; flex-wrap:wrap;}
+  .install .dl-note{color:var(--sage); font-size:14px;}
+
+  .topbar{position:sticky; top:0; z-index:40; backdrop-filter:blur(14px);
+    background:color-mix(in srgb, var(--garth-900) 82%, transparent);
+    border-bottom:1px solid var(--line);}
+  .topbar .wrap{display:flex; align-items:center; gap:20px; height:62px;}
+  .brand{display:flex; align-items:center; gap:11px; font-family:var(--serif); font-size:19px; letter-spacing:.01em;}
+  .brand svg{display:block;}
+  .nav{margin-left:auto; display:flex; align-items:center; gap:26px;}
+  .nav a{font-size:14.5px; color:var(--sage);}
+  .nav a:hover{color:var(--parchment);}
+  .pill{font-family:var(--sans); font-size:12px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--gold-300); border:1px solid color-mix(in srgb,var(--gold-500) 45%,transparent);
+    border-radius:100px; padding:5px 11px; background:color-mix(in srgb,var(--gold-500) 9%,transparent);}
+  .lang-wrap{position:relative; display:flex; align-items:center; color:var(--moss);}
+  .themebtn{display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:100px; border:1px solid var(--line); background:color-mix(in srgb,var(--garth-600) 42%,transparent); color:var(--sage); cursor:pointer;}
+  .themebtn:hover{color:var(--parchment); border-color:var(--moss);}
+  .lang-wrap svg{position:absolute; left:9px; pointer-events:none;}
+  .langsel{appearance:none; -webkit-appearance:none; font-family:var(--sans); font-size:13.5px; color:var(--sage);
+    background:color-mix(in srgb,var(--garth-600) 42%,transparent); border:1px solid var(--line);
+    border-radius:100px; padding:6px 24px 6px 30px; cursor:pointer;}
+  .lang-wrap .caret{position:absolute; right:11px; pointer-events:none; color:var(--moss); font-size:9px;}
+  .langsel option{color:#12291D; background:#EDE6D6;}
+  @media(max-width:760px){ .nav a:not(.pill){display:none;} }
+
+  .hero{position:relative; overflow:hidden; padding:96px 0 88px;}
+  .hero-grid{display:grid; grid-template-columns:1.05fr .95fr; gap:48px; align-items:center;}
+  .hero h1{font-size:clamp(40px,6vw,68px); letter-spacing:-.015em;}
+  .hero h1 em{font-style:italic; color:var(--gold-300);}
+  .hero .lede{margin-top:22px; font-size:20px;}
+  .cta-row{display:flex; align-items:center; gap:16px; margin-top:34px; flex-wrap:wrap;}
+  .btn{font-family:var(--sans); font-size:15.5px; font-weight:600; border-radius:12px; padding:13px 22px;
+    display:inline-flex; align-items:center; gap:9px; border:1px solid transparent; cursor:pointer;}
+  .btn-primary{background:linear-gradient(180deg,var(--gold-300),var(--gold-500)); color:#2A1E06;
+    box-shadow:0 1px 0 rgba(255,255,255,.25) inset, 0 10px 30px -12px rgba(203,162,78,.6);}
+  .btn-primary[aria-disabled="true"]{cursor:default; opacity:.96;}
+  .btn-ghost{border-color:var(--line); color:var(--parchment); background:color-mix(in srgb,var(--garth-600) 40%,transparent);}
+  .btn-ghost:hover{border-color:var(--moss);}
+  .hero-note{margin-top:18px; font-size:13.5px; color:var(--moss); display:flex; align-items:center; gap:8px;}
+  .ring-stage{position:relative; display:grid; place-items:center; min-height:360px;}
+  .ring-stage canvas{width:340px; height:340px; max-width:78vw;}
+  .ring-caption{position:absolute; text-align:center; pointer-events:none;}
+  .ring-caption .time{font-family:var(--mono); font-size:38px; font-variant-numeric:tabular-nums; letter-spacing:.02em; color:#EDE6D6;}
+  .ring-caption .label{font-size:12px; letter-spacing:.22em; text-transform:uppercase; color:#E7C878; margin-top:4px;}
+  .hero::after{content:""; position:absolute; inset:0; pointer-events:none;
+    background:radial-gradient(60% 55% at 72% 46%, rgba(62,122,78,.16), transparent 70%);}
+  @media(max-width:840px){ .hero-grid{grid-template-columns:1fr; gap:24px;} .ring-stage{order:-1;} }
+
+  .ritual .wrap{position:relative; z-index:1;}
+  .steps{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; margin-top:52px;
+    background:var(--line); border:1px solid var(--line); border-radius:18px; overflow:hidden;}
+  .step{background:var(--garth-800); padding:34px 30px; display:flex; flex-direction:column; gap:12px;}
+  .step .n{font-family:var(--mono); font-size:13px; color:var(--gold-500); letter-spacing:.1em;}
+  .step h3{font-size:23px;}
+  .step p{color:var(--sage); font-size:15.5px;}
+  @media(max-width:760px){ .steps{grid-template-columns:1fr;} }
+
+  .craft h2, .stats h2, .pricing h2, .install h2, .faq h2, .features h2, .founder h2, .compare h2{font-size:clamp(30px,4vw,44px); letter-spacing:-.01em;}
+  img, canvas, pre{max-width:100%;}
+  .heat{min-width:0;}
+  .lede, .note p, .founder .note p{overflow-wrap:break-word;}
+  .section-head{max-width:64ch; display:flex; flex-direction:column; gap:16px;}
+  .shotframe{margin-top:48px; border:1px solid var(--line); border-radius:16px; overflow:hidden;
+    background:linear-gradient(180deg,var(--garth-700),var(--garth-800)); box-shadow:0 40px 90px -50px #000;}
+  .shot-titlebar{height:38px; display:flex; align-items:center; gap:8px; padding:0 14px; border-bottom:1px solid var(--line);
+    background:color-mix(in srgb,var(--garth-600) 55%,transparent);}
+  .tl-dot{width:11px; height:11px; border-radius:50%; background:#3a5a47;}
+  .shot-body{aspect-ratio:16/9; display:grid; place-items:center; position:relative;
+    background:
+      radial-gradient(50% 60% at 50% 42%, rgba(62,122,78,.14), transparent 70%),
+      repeating-linear-gradient(135deg, rgba(255,255,255,.012) 0 2px, transparent 2px 24px);}
+  .shot-ph{display:flex; flex-direction:column; align-items:center; gap:10px; color:var(--moss); font-size:13.5px; text-align:center; padding:0 20px;}
+  .shot-ph .k{font-family:var(--mono); letter-spacing:.14em; text-transform:uppercase; font-size:11px; color:var(--gold-500);}
+  /* real product screenshots — image swaps with the page theme */
+  .shot-dark{display:block;} .shot-light{display:none;}
+  html[data-theme="light"] .shot-dark{display:none;} html[data-theme="light"] .shot-light{display:block;}
+  .appwin{margin-top:48px; border:1px solid var(--line); border-radius:16px; overflow:hidden; background:var(--garth-800); box-shadow:0 40px 90px -42px rgba(0,0,0,.55);}
+  .appwin-bar{height:40px; display:flex; align-items:center; gap:8px; padding:0 16px; border-bottom:1px solid var(--line); background:var(--garth-700);}
+  .appwin img{width:100%; height:auto;}
+  .popstage{margin-top:44px; display:grid; place-items:center; padding:52px 20px; border-radius:22px; border:1px solid var(--line);
+    background:radial-gradient(120% 90% at 50% 0%, color-mix(in srgb,var(--moss) 16%,transparent), transparent 62%);}
+  /* menu-bar popover — a faithful CSS reproduction, theme-native + crisp at any size */
+  .pop{--pfg:#E9E3D4; --pdim:#8FA593; --pcard:#18261D; --pline:rgba(125,164,135,.16); --pbtn:rgba(125,164,135,.14); --parc:#5FB98A;
+    width:min(300px,80vw); border-radius:20px; padding:22px 20px 10px; font-family:var(--sans);
+    background:var(--pcard); border:1px solid rgba(255,255,255,.05); box-shadow:0 36px 78px -26px rgba(0,0,0,.62);}
+  html[data-theme="light"] .pop{--pfg:#1B2A20; --pdim:#6E7E6F; --pcard:#fff; --pline:rgba(20,40,25,.1); --pbtn:rgba(46,122,79,.09); --parc:#2F7A4F;
+    border-color:rgba(20,40,25,.07); box-shadow:0 36px 78px -30px rgba(20,40,25,.26);}
+  .pop-head{text-align:center; font-size:15px; font-weight:600; color:var(--pdim);}
+  .pop-ring{position:relative; width:146px; height:146px; margin:8px auto 0;}
+  .pop-ring svg{width:100%; height:100%; transform:rotate(-90deg);}
+  .pr-track{fill:none; stroke:var(--pline); stroke-width:6;}
+  .pr-fill{fill:none; stroke:var(--parc); stroke-width:6; stroke-linecap:round;}
+  .pop-time{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;}
+  .pop-time .pt{font-family:var(--mono); font-size:33px; font-variant-numeric:tabular-nums; letter-spacing:.01em; color:var(--pfg);}
+  .pop-time .pf{font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--gold-500); margin-top:3px;}
+  .pop-session{text-align:center; font-size:13px; color:var(--pdim); margin:11px 0 14px;}
+  .pop-btns{display:flex; gap:12px; justify-content:center; margin-bottom:12px;}
+  .pbtn{padding:8px 22px; border-radius:9px; font-size:14px; font-weight:600; background:var(--pbtn); color:var(--pfg);}
+  .pbtn-pri{color:var(--parc);}
+  .pop-sep{height:1px; background:var(--pline); margin:2px -20px 12px;}
+  .pop-line{display:flex; align-items:center; justify-content:space-between; font-size:14px; color:var(--pfg); padding:0 2px 12px;}
+  .pop-stk{display:flex; align-items:center; gap:6px;}
+  .pop-dim2{color:var(--pdim); font-weight:400;}
+  .seal{width:16px; height:16px; flex:none;}
+  .seal .sc{fill:var(--gold-500);}
+  .seal .sk{fill:none; stroke:#fff; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round;}
+  .pop-act span{color:var(--parc);}
+  /* stats "ledger" band: light gets a parchment window frame; dark uses the theme frame + dark shot */
+  html[data-theme="light"] .stats .appwin{background:#F6F1E6; border-color:rgba(20,40,25,.12); box-shadow:0 40px 90px -46px rgba(20,40,25,.38);}
+  html[data-theme="light"] .stats .appwin-bar{background:#EAE2CE; border-bottom-color:rgba(20,40,25,.1);}
+  .featrow{display:grid; grid-template-columns:repeat(2,1fr); gap:20px; margin-top:44px;}
+  .card{border:1px solid var(--line); border-radius:16px; padding:26px 24px; background:var(--garth-800); display:flex; flex-direction:column; gap:10px;}
+  .card .mk{width:34px; height:34px; border-radius:9px; display:grid; place-items:center; color:var(--gold-300);
+    background:color-mix(in srgb,var(--gold-500) 14%,transparent); border:1px solid color-mix(in srgb,var(--gold-500) 30%,transparent);}
+  .card h3{font-size:19px;}
+  .card p{color:var(--sage); font-size:14.5px;}
+  @media(max-width:760px){ .featrow{grid-template-columns:1fr;} }
+
+  .stats{background:linear-gradient(180deg,var(--garth-700),var(--garth-800)); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  html[data-theme="light"] .stats{background:linear-gradient(180deg,#EDE6D6,#E3DAC4); color:#16271D;}
+  html[data-theme="light"] .stats .eyebrow{color:#9A7A28;}
+  html[data-theme="light"] .stats .lede{color:#4B5A4F;}
+  .stats .duo{display:grid; grid-template-columns:1.1fr .9fr; gap:44px; align-items:center; margin-top:48px;}
+  .heat{display:grid; grid-template-columns:repeat(20,1fr); gap:4px;}
+  .heat i{aspect-ratio:1; border-radius:3px; background:#D2C7AC;}
+  .heatwrap{background:#F3EEE0; border:1px solid #D9CEB4; border-radius:16px; padding:22px; box-shadow:0 20px 50px -34px rgba(90,70,20,.5);}
+  .heatwrap .cap{display:flex; justify-content:space-between; font-size:12px; color:#7A6A44; margin-top:14px; font-family:var(--mono);}
+  .statlist{display:flex; flex-direction:column; gap:18px;}
+  .statlist .row{display:flex; align-items:baseline; gap:14px; border-bottom:1px solid #D9CEB4; padding-bottom:16px;}
+  .statlist .big{font-family:var(--mono); font-size:30px; font-variant-numeric:tabular-nums; color:var(--ink); min-width:96px;}
+  .statlist .lab{color:#5A6A5E; font-size:15px;}
+  @media(max-width:760px){ .stats .duo{grid-template-columns:1fr;} }
+
+  .split{display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:44px;}
+  .tier{border:1px solid var(--line); border-radius:18px; padding:30px; background:var(--garth-800);}
+  .tier.pro{background:linear-gradient(180deg,var(--garth-700),var(--garth-800)); border-color:color-mix(in srgb,var(--gold-500) 34%,transparent);}
+  .tier h3{font-size:22px; display:flex; align-items:center; gap:12px;}
+  .tier .tag{font-family:var(--sans); font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+    padding:3px 9px; border-radius:100px;}
+  .tag.free{color:var(--sage); border:1px solid var(--line);}
+  .tag.propro{color:#2A1E06; background:linear-gradient(180deg,var(--gold-300),var(--gold-500));}
+  .flist{list-style:none; padding:0; margin:18px 0 0; display:flex; flex-direction:column; gap:12px;}
+  .flist li{display:flex; gap:11px; font-size:15px; color:var(--sage); align-items:flex-start;}
+  .flist svg{flex:none; margin-top:3px;}
+  .tier .flist svg{color:var(--moss);}
+  .tier.pro .flist svg{color:var(--gold-300);}
+  @media(max-width:760px){ .split{grid-template-columns:1fr;} }
+
+  .prices{display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin:44px auto 0; max-width:600px;}
+  .price{border:1px solid var(--line); border-radius:16px; padding:26px 22px; background:var(--garth-800); display:flex; flex-direction:column; gap:6px;}
+  .price.feature{border-color:color-mix(in srgb,var(--gold-500) 40%,transparent); background:linear-gradient(180deg,var(--garth-700),var(--garth-800));}
+  .price .plan{font-family:var(--sans); font-weight:600; font-size:14px; letter-spacing:.04em; text-transform:uppercase; color:var(--gold-500);}
+  .price .amt{font-family:var(--serif); font-size:34px; color:var(--parchment);}
+  .price .amt small{font-family:var(--sans); font-size:14px; color:var(--moss);}
+  .price .desc{color:var(--sage); font-size:13.5px; margin-top:4px;}
+  .price-note{margin-top:18px; font-size:13.5px; color:var(--moss); text-align:center;}
+  @media(max-width:860px){ .prices{grid-template-columns:1fr 1fr;} }
+  @media(max-width:520px){ .prices{grid-template-columns:1fr;} }
+
+  .install .term{margin-top:40px; border:1px solid var(--line); border-radius:14px; overflow:hidden; background:#0A1912;}
+  .term .bar{height:34px; display:flex; align-items:center; gap:7px; padding:0 13px; border-bottom:1px solid var(--line);}
+  .term pre{margin:0; padding:22px 24px; font-family:var(--mono); font-size:14.5px; line-height:1.9; color:#EDE6D6; overflow-x:auto;}
+  .term .c{color:#7BA487;} .term .g{color:#E7C878;}
+  .install .fine{margin-top:16px; font-size:13.5px; color:var(--moss);}
+
+  .faq .qa{margin-top:40px; display:grid; grid-template-columns:1fr 1fr; gap:16px 44px;}
+  .faq .q{border-top:1px solid var(--line); padding-top:18px; display:flex; flex-direction:column; gap:8px;}
+  .faq h3{font-size:18px;}
+  .faq .q p{color:var(--sage); font-size:14.5px;}
+  @media(max-width:760px){ .faq .qa{grid-template-columns:1fr;} }
+
+  footer{border-top:1px solid var(--line); padding:44px 0 60px; color:var(--moss);}
+  footer .wrap{display:flex; align-items:center; gap:18px; flex-wrap:wrap; font-size:14px;}
+  footer .brand{font-size:17px; color:var(--parchment);}
+  footer .fnav{margin-left:auto; display:flex; gap:22px;}
+  footer a:hover{color:var(--parchment);}
+
+  .reveal{opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease;}
+  .reveal.in{opacity:1; transform:none;}
+  @media(prefers-reduced-motion:reduce){ .reveal{opacity:1; transform:none; transition:none;} html{scroll-behavior:auto;} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <span class="brand">
+      <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <defs><linearGradient id="cgn" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F4E4B8"/><stop offset=".5" stop-color="#E7C878"/><stop offset="1" stop-color="#CBA24E"/></linearGradient></defs>
+        <rect x="1" y="1" width="24" height="24" rx="7" fill="#22432F"/>
+        <circle cx="13" cy="13" r="6.4" fill="#2F5C3E"/>
+        <circle cx="13" cy="13" r="7.4" fill="none" stroke="#EDE6D6" stroke-width="1.1" opacity="0.5"/>
+        <path d="M13 5.6 A7.4 7.4 0 1 1 5.6 13" fill="none" stroke="url(#cgn)" stroke-width="1.1" stroke-linecap="round"/>
+        <circle cx="13" cy="5.6" r="1" fill="#F4E4B8"/>
+      </svg>
+      Cloister
+    </span>
+    <nav class="nav">
+      <a href="#craft" data-i18n="nav_app">The app</a>
+      <a href="#stats" data-i18n="nav_history">Focus history</a>
+      <a href="#install" data-i18n="nav_install">Install</a>
+      <a href="#pricing" data-i18n="nav_pricing">Pricing</a>
+      <a class="pill" href="#pricing" data-i18n="nav_soon">Coming soon</a>
+      <button class="themebtn" id="theme" type="button" aria-label="Toggle light or dark mode"></button>
+      <span class="lang-wrap">
+        <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.4" fill="none" stroke="currentColor" stroke-width="1.1"/><path d="M1.6 8h12.8M8 1.6c2 2 2 10.8 0 12.8M8 1.6c-2 2-2 10.8 0 12.8" fill="none" stroke="currentColor" stroke-width="1.1"/></svg>
+        <select class="langsel" id="lang" aria-label="Language">
+          <option value="en">English</option>
+          <option value="ko">한국어</option>
+          <option value="ja">日本語</option>
+          <option value="zh-Hans">简体中文</option>
+          <option value="zh-Hant">繁體中文</option>
+          <option value="es">Español</option>
+          <option value="fr">Français</option>
+          <option value="de">Deutsch</option>
+          <option value="pt-BR">Português</option>
+          <option value="it">Italiano</option>
+        </select>
+        <span class="caret">▼</span>
+      </span>
+    </nav>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow" data-i18n="hero_eyebrow">Focus manager · for macOS</span>
+      <h1 style="margin-top:18px" data-i18n-html="hero_h1">A quiet <em>Cloister</em><br>for focused work.</h1>
+      <p class="lede" data-i18n="hero_lede">Cloister is a calm focus timer that lives in your Mac's menu bar. Begin a session, let the gold ring close, and watch your focused hours stack — one quiet day after another.</p>
+      <div class="cta-row">
+        <span class="btn btn-primary" role="button" aria-disabled="true" tabindex="0" data-i18n="hero_cta_soon">Coming soon</span>
+        <a class="btn btn-ghost" href="#craft" data-i18n="hero_cta_how">See how it works ↓</a>
+      </div>
+      <p class="hero-note">
+        <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1l2 2h3v3l2 2-2 2v3h-3l-2 2-2-2H3v-3L1 8l2-2V3h3z" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+        <span data-i18n="hero_note">Native menu-bar app · self-updating · your data stays on your Mac</span>
+      </p>
+    </div>
+    <div class="ring-stage">
+      <canvas id="ring" width="680" height="680"></canvas>
+      <div class="ring-caption">
+        <div class="time" id="clock">25:00</div>
+        <div class="label" data-i18n="ring_label">Focus</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="section ritual">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow" data-i18n="ritual_eyebrow">The ritual</span>
+      <h2 style="font-size:clamp(30px,4vw,44px)" data-i18n="ritual_h2">Focus. Break. Stack.</h2>
+      <p class="lede" data-i18n-html="ritual_lede">One honest loop, repeated. A completed focus and its break make a <strong style="color:var(--gold-300);font-weight:600">stack</strong> — the single number that tells you the day went well.</p>
+    </div>
+    <div class="steps reveal">
+      <div class="step"><span class="n">01</span><h3 data-i18n="step1_t">Focus</h3><p data-i18n="step1_d">Start a session from the menu bar. The ring closes as your time runs — nothing else on screen asks for you.</p></div>
+      <div class="step"><span class="n">02</span><h3 data-i18n="step2_t">Break</h3><p data-i18n="step2_d">When focus ends, take the break it earned. Skip it and the stack doesn't count — the rest is part of the work.</p></div>
+      <div class="step"><span class="n">03</span><h3 data-i18n="step3_t">Stack</h3><p data-i18n="step3_d">Focus plus break, both finished, is one stack. They gather into streaks, heatmaps, and hours you can look back on.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section craft" id="craft">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow" data-i18n="craft_eyebrow">Crafted for the Mac</span>
+      <h2 data-i18n="craft_h2">It lives in the menu bar, not in your way.</h2>
+      <p class="lede" data-i18n="craft_lede">A single tap opens the timer. The gold ring rides in your menu bar so a glance tells you where you are — no window to hunt for, no dock icon to mind.</p>
+    </div>
+    <div class="popstage reveal">
+      <div class="pop" role="img" aria-label="Cloister's menu-bar popover — an active focus session with 20:26 left">
+        <div class="pop-head">Focus</div>
+        <div class="pop-ring">
+          <svg viewBox="0 0 120 120" aria-hidden="true"><circle class="pr-track" cx="60" cy="60" r="52"/><circle class="pr-fill" cx="60" cy="60" r="52" pathLength="100" stroke-dasharray="18 100"/></svg>
+          <div class="pop-time"><span class="pt">20:26</span><span class="pf">Focus</span></div>
+        </div>
+        <div class="pop-session">Session 2 / 4</div>
+        <div class="pop-btns"><span class="pbtn pbtn-pri">Pause</span><span class="pbtn">Cancel</span></div>
+        <div class="pop-sep"></div>
+        <div class="pop-line"><span class="pop-stk"><svg class="seal" viewBox="0 0 20 20" aria-hidden="true"><circle class="sc" cx="10" cy="10" r="9"/><path class="sk" d="M6 10.3l2.7 2.7L14 7.1"/></svg><b>3</b>&nbsp;<span class="pop-dim2">/ 4 Stacks</span></span><span class="pop-dim2">2h 05m</span></div>
+        <div class="pop-line pop-act"><span>Dashboard</span><span>Settings</span></div>
+        <div class="pop-sep"></div>
+        <div class="pop-line pop-act"><span>Check for Updates…</span><span>Quit</span></div>
+      </div>
+    </div>
+    <div class="featrow">
+      <div class="card reveal"><span class="mk"><svg width="16" height="16" viewBox="0 0 16 16"><rect x="1.5" y="3.5" width="13" height="9" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="8" cy="8" r="2.2" fill="none" stroke="currentColor" stroke-width="1.3"/></svg></span><h3 data-i18n="craft_c1t">Menu-bar timer</h3><p data-i18n="craft_c1d">The ring and remaining time sit in the bar. Choose the ring, the countdown, or both.</p></div>      <div class="card reveal"><span class="mk"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 2v4l3 2M14 8A6 6 0 1 1 2 8a6 6 0 0 1 12 0z" fill="none" stroke="currentColor" stroke-width="1.3"/></svg></span><h3 data-i18n="craft_c3t">Yours to shape</h3><p data-i18n="craft_c3d">System, light or dark themes. Six session sounds. Custom keyboard shortcuts for every action.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section stats" id="stats">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow" data-i18n="stats_eyebrow">Focus history</span>
+      <h2 data-i18n="stats_h2">Your focused hours, kept like a ledger.</h2>
+      <p class="lede" data-i18n="stats_lede">Every stack is written down. Cloister turns them into streaks, a year-long heatmap, and totals worth returning to — the quiet proof that the days added up.</p>
+    </div>
+    <div class="appwin reveal">
+      <div class="appwin-bar"><span class="tl-dot"></span><span class="tl-dot"></span><span class="tl-dot"></span></div>
+      <img class="shot-light" src="images/insights-light.png" width="2576" height="1824" loading="lazy" alt="Cloister Insights — focus trend, weekly comparison, and a year-long activity heatmap">
+      <img class="shot-dark" src="images/insights-dark.png" width="2570" height="1814" loading="lazy" alt="Cloister Insights — focus trend, weekly comparison, and a year-long activity heatmap">
+    </div>
+  </div>
+</section>
+
+<section class="section founder" id="why">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow" data-i18n="founder_eyebrow">Why Cloister</span>
+      <h2 data-i18n="founder_h2">The reason is simple.</h2>
+    </div>
+    <div class="note reveal">
+      <p data-i18n="founder_p1">Most timer apps go one of two ways. Some are so bare they only count the minutes; others pile on tags, time tracking, and to-do lists until focus — the whole point — gets lost.</p>
+      <p data-i18n-html="founder_p2">I wanted the space in between: to simply record the time I focused, and let it add up like a ledger worth looking back on. A <em>cloister</em> is the quiet walkway around a courtyard — I wanted that calm in my Mac's menu bar. No account, no cloud; the data stays on my Mac.</p>
+      <p data-i18n="founder_p3">Rest is part of the loop, on purpose — you have to recover well to keep focusing well. So I chose a lasting simplicity over a pile of features: something you can keep using for a long time.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section features">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow" data-i18n="feat_eyebrow">Free &amp; Pro</span>
+      <h2 data-i18n="feat_h2">A great timer, free. Depth when you want it.</h2>
+      <p class="lede" data-i18n="feat_lede">The timer that makes Cloister worth using is free forever. Pro unlocks the long view — full history, more presets, and your data in your hands.</p>
+    </div>
+    <div class="split">
+      <div class="tier reveal">
+        <h3><span class="tag free" data-i18n="tag_free">Free</span> <span data-i18n="free_title">Everything to focus</span></h3>
+        <ul class="flist">
+          <li><svg width="15" height="15" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span data-i18n="free_1">Focus &amp; break timer, ring, today's stack</span></li>
+          <li><svg width="15" height="15" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span data-i18n="free_2">Menu-bar timer, popover</span></li>
+          <li><svg width="15" height="15" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span data-i18n="free_3">One editable preset · themes · six sounds · shortcuts</span></li>
+          <li><svg width="15" height="15" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span data-i18n="free_4">This week's stacks, recent heatmap &amp; history</span></li>
+        </ul>
+      </div>
+      <div class="tier pro reveal">
+        <h3><span class="tag propro" data-i18n="tag_pro">Pro</span> <span data-i18n="pro_title">The long view</span></h3>
+        <ul class="flist">
+          <li><svg width="15" height="15" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span data-i18n="pro_1">Current &amp; best streaks, lifetime hours, 30-day average</span></li>
+          <li><svg width="15" height="15" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span data-i18n="pro_2">Full-history heatmap and unlimited history</span></li>
+          <li><svg width="15" height="15" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span data-i18n="pro_3">Unlimited presets — switch and reorder</span></li>
+          <li><svg width="15" height="15" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span data-i18n="pro_4">Export &amp; import your data (CSV · JSON)</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section compare" id="compare">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow" data-i18n="cmp_eyebrow">How it compares</span>
+      <h2 data-i18n="cmp_h2">Not too little, not too much.</h2>
+    </div>
+    <div class="split">
+      <div class="tier reveal">
+        <h3 data-i18n="cmp_other_t">Most timers</h3>
+        <ul class="flist">
+          <li><svg width="15" height="15" viewBox="0 0 16 16"><path d="M4 8h8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span data-i18n="cmp_other_1">A bare stopwatch — or a tracker piled with tags and to-dos.</span></li>
+          <li><svg width="15" height="15" viewBox="0 0 16 16"><path d="M4 8h8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span data-i18n="cmp_other_2">Your history on their server, behind an account.</span></li>
+          <li><svg width="15" height="15" viewBox="0 0 16 16"><path d="M4 8h8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span data-i18n="cmp_other_3">Free but shallow, or a fee every month.</span></li>
+        </ul>
+      </div>
+      <div class="tier pro reveal">
+        <h3 style="color:var(--gold-300)" data-i18n="cmp_cloister_t">Cloister</h3>
+        <ul class="flist">
+          <li><svg width="15" height="15" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span data-i18n="cmp_cloister_1">Just your focus, recorded — and it stacks into something worth revisiting.</span></li>
+          <li><svg width="15" height="15" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span data-i18n="cmp_cloister_2">On your Mac. No account, no cloud.</span></li>
+          <li><svg width="15" height="15" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span data-i18n="cmp_cloister_3">$19.99 once — updates included.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section install" id="install">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow" data-i18n="install_eyebrow">Install</span>
+      <h2 data-i18n="install_h2">One line with Homebrew.</h2>
+      <p class="lede" data-i18n="install_lede">Cloister ships as a signed, notarized DMG and a Homebrew cask, and keeps itself up to date — no App Store, no re-downloading.</p>
+    </div>
+    <div class="term reveal">
+      <div class="bar"><span class="tl-dot"></span><span class="tl-dot"></span><span class="tl-dot"></span></div>
+      <pre><span class="c" data-i18n="install_comment"># add the tap, trust it, install</span>
+brew tap khy07181/cloister
+brew trust khy07181/cloister
+brew install --cask <span class="g">cloister</span></pre>
+    </div>
+    <div class="dl-row reveal">
+      <!-- TODO(launch): confirm the DMG download URL — point at the direct asset (…/releases/latest/download/<file>.dmg) once a non-prerelease is published. -->
+      <a class="btn btn-primary" href="https://github.com/khy07181/homebrew-cloister/releases" data-i18n="install_dl">Download the .dmg</a>
+      <span class="dl-note" data-i18n="install_dl_note">Notarized · Apple Silicon &amp; Intel · macOS 15+. No Homebrew required.</span>
+    </div>
+    <p class="fine" data-i18n="install_fine">Homebrew 6.0+ asks you to trust a third-party tap before installing its casks — that's the middle line. After launch this box goes live; today it's a preview.</p>
+  </div>
+</section>
+
+<section class="section pricing" id="pricing">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow" data-i18n="price_eyebrow">Pricing</span>
+      <h2 data-i18n="price_h2">Pay once. Yours forever.</h2>
+      <p class="lede" data-i18n="price_lede">One purchase unlocks Pro for good — no subscription, no renewals.</p>
+    </div>
+    <div class="prices">
+      <div class="price reveal"><span class="plan" data-i18n="plan_free">Free</span><span class="amt">$0</span><span class="desc" data-i18n="desc_free">The full timer, forever. No account needed.</span></div>      <div class="price feature reveal"><span class="plan" style="color:var(--gold-300)" data-i18n="plan_life">Lifetime</span><span class="amt">$19.99</span><span class="desc" data-i18n="desc_life">Buy once. Pro that never renews.</span></div>
+    </div>
+    <p class="price-note" data-i18n="price_note">Sold through Lemon Squeezy, our merchant of record — taxes and receipts handled.</p>
+  </div>
+</section>
+
+<section class="section faq" id="faq">
+  <div class="wrap">
+    <div class="section-head reveal"><span class="eyebrow" data-i18n="faq_eyebrow">Questions</span><h2 data-i18n="faq_h2">Good to know.</h2></div>
+    <div class="qa">
+      <div class="q reveal"><h3 data-i18n="faq_q1">Where does my data live?</h3><p data-i18n="faq_a1">On your Mac. Cloister stores your sessions locally — there's no server and no account to create just to use it.</p></div>
+      <div class="q reveal"><h3 data-i18n="faq_q3">Which macOS do I need?</h3><p data-i18n="faq_a3">macOS 15 (Sequoia) or newer, on Apple Silicon or Intel.</p></div>
+      <div class="q reveal"><h3 data-i18n="faq_q4">Is there a free trial?</h3><p data-i18n="faq_a4">The free tier is the trial — a complete focus timer with no time limit. Upgrade to Pro whenever the long view is worth it.</p></div>      <div class="q reveal"><h3 data-i18n="faq_q6">Refunds?</h3><p data-i18n="faq_a6">Yes — within 14 days of purchase, no questions asked. Just email us and it's handled.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span class="brand">
+      <svg width="22" height="22" viewBox="0 0 26 26" aria-hidden="true"><defs><linearGradient id="cgf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F4E4B8"/><stop offset=".5" stop-color="#E7C878"/><stop offset="1" stop-color="#CBA24E"/></linearGradient></defs><rect x="1" y="1" width="24" height="24" rx="7" fill="#22432F"/><circle cx="13" cy="13" r="6.4" fill="#2F5C3E"/><circle cx="13" cy="13" r="7.4" fill="none" stroke="#EDE6D6" stroke-width="1.1" opacity="0.5"/><path d="M13 5.6 A7.4 7.4 0 1 1 5.6 13" fill="none" stroke="url(#cgf)" stroke-width="1.1" stroke-linecap="round"/><circle cx="13" cy="5.6" r="1" fill="#F4E4B8"/></svg>
+      Cloister
+    </span>
+    <span style="color:var(--moss)" data-i18n="footer_tag">A self-distributed focus timer for macOS.</span>
+    <nav class="fnav">
+      <a href="#install" data-i18n="footer_install">Install</a>
+      <a href="#pricing" data-i18n="footer_pricing">Pricing</a>
+      <a href="#faq" data-i18n="footer_faq">FAQ</a>
+      <a href="#" data-i18n="footer_privacy">Privacy</a>
+      <a href="mailto:support@dochigarden.com" data-i18n="footer_support">Support</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  // ---- theme (light / dark) ----
+  var tbtn = document.getElementById('theme');
+  var sunI = '<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><circle cx="8" cy="8" r="3.1"/><path d="M8 1v1.7M8 13.3V15M1 8h1.7M13.3 8H15M3.1 3.1l1.2 1.2M11.7 11.7l1.2 1.2M12.9 3.1l-1.2 1.2M4.3 11.7l-1.2 1.2"/></svg>';
+  var moonI = '<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><path d="M13.4 9.6A5.5 5.5 0 0 1 6.4 2.6 5.5 5.5 0 1 0 13.4 9.6z"/></svg>';
+  function setTheme(t){ document.documentElement.setAttribute('data-theme', t); if(tbtn) tbtn.innerHTML = (t==='light') ? moonI : sunI; try{ localStorage.setItem('cloister_theme', t); }catch(e){} try{ window.dispatchEvent(new Event('cloister-theme')); }catch(e){} }
+  (function(){ var s; try{ s = localStorage.getItem('cloister_theme'); }catch(e){} if(s!=='light' && s!=='dark'){ s = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark'; } setTheme(s); })();
+  if(tbtn) tbtn.addEventListener('click', function(){ setTheme(document.documentElement.getAttribute('data-theme')==='light' ? 'dark' : 'light'); });
+
+  var T = {
+    ko:{
+      nav_app:"앱",nav_history:"집중 기록",nav_pricing:"가격",nav_install:"설치",nav_soon:"출시 예정",
+      hero_eyebrow:"Focus manager · macOS",hero_h1:"고요한 <em>Cloister</em>에서<br>집중하는 시간.",
+      hero_lede:"Cloister는 Mac 메뉴바에 사는 차분한 집중 타이머입니다. 세션을 시작하고, 골드 링이 닫히는 동안, 집중한 시간이 하루하루 쌓이는 걸 지켜보세요.",
+      hero_cta_soon:"출시 예정",hero_cta_how:"어떻게 작동하나요 ↓",
+      hero_note:"네이티브 메뉴바 앱 · 자동 업데이트 · 데이터는 Mac에만",ring_label:"집중",
+      ritual_eyebrow:"루틴",ritual_h2:"집중. 휴식. 스택.",
+      ritual_lede:"정직한 한 번의 루프, 그 반복. 집중과 휴식을 모두 끝내면 하나의 <strong style=\"color:var(--gold-300);font-weight:600\">스택</strong>이 됩니다 — 오늘 하루가 좋았는지 알려주는 단 하나의 숫자.",
+      step1_t:"집중",step1_d:"메뉴바에서 세션을 시작하세요. 시간이 흐르면 링이 닫히고, 화면의 다른 무엇도 당신을 부르지 않습니다.",
+      step2_t:"휴식",step2_d:"집중이 끝나면 그만큼의 휴식을 가지세요. 건너뛰면 스택은 세지 않습니다 — 쉼도 일의 일부입니다.",
+      step3_t:"스택",step3_d:"집중과 휴식을 모두 마치면 하나의 스택. 이들이 모여 스트릭, 히트맵, 돌아볼 수 있는 시간이 됩니다.",
+      craft_eyebrow:"Mac을 위해 다듬다",craft_h2:"방해가 아니라, 메뉴바에 삽니다.",
+      craft_lede:"한 번의 탭으로 타이머가 열립니다. 골드 링이 메뉴바에 떠 있어 한눈에 지금 어디쯤인지 보이죠 — 찾을 창도, 신경 쓸 독 아이콘도 없습니다.",
+      shot_kicker:"스크린샷",craft_shot:"메뉴바 링 & 팝오버 — 출시 전 캡처 예정",
+      craft_c1t:"메뉴바 타이머",craft_c1d:"링과 남은 시간이 바에 놓입니다. 링, 카운트다운, 또는 둘 다 선택하세요.",
+      craft_c2t:"위젯 & Live Activity",craft_c2d:"바탕화면의 타이머 위젯, 그리고 iPhone으로 가져가면 다이나믹 아일랜드의 Live Activity.",
+      craft_c3t:"당신의 방식대로",craft_c3d:"시스템·라이트·다크 테마. 세션 사운드 6종. 모든 동작에 커스텀 단축키.",
+      stats_eyebrow:"집중 기록",stats_h2:"집중한 시간을, 장부처럼 남깁니다.",
+      stats_lede:"모든 스택이 기록됩니다. Cloister는 그것을 스트릭, 1년 히트맵, 다시 돌아볼 총합으로 바꿔줍니다 — 하루하루가 쌓였다는 조용한 증거.",
+      stats_weeks:"52주",stats_scale:"적음 · 많음",
+      stat1_lab:"일 현재 스트릭 — 역대 최고",stat2_lab:"시간, 전체 누적 집중",stat3_lab:"스택/일, 30일 평균",
+      feat_eyebrow:"Free & Pro",feat_h2:"좋은 타이머는 무료. 깊이는 원할 때.",
+      feat_lede:"Cloister를 쓸 가치가 있게 만드는 타이머는 영원히 무료입니다. Pro는 긴 안목을 엽니다 — 전체 기록, 더 많은 프리셋, 그리고 당신의 데이터를 당신 손에.",
+      tag_free:"무료",free_title:"집중에 필요한 모든 것",
+      free_1:"집중 & 휴식 타이머, 링, 오늘의 스택",free_2:"메뉴바 타이머, 팝오버",
+      free_3:"편집 가능한 프리셋 1개 · 테마 · 사운드 6종 · 단축키",free_4:"이번 주 스택, 최근 히트맵 & 기록",
+      tag_pro:"Pro",pro_title:"긴 안목",
+      pro_1:"현재 & 최고 스트릭, 누적 시간, 30일 평균",pro_2:"전체 기간 히트맵과 무제한 기록",
+      pro_3:"무제한 프리셋 — 전환과 재정렬",pro_4:"데이터 내보내기 & 가져오기(CSV · JSON)",
+      price_eyebrow:"가격",price_h2:"한 번 결제. 평생 소장.",
+      price_lede:"한 번의 구매로 Pro가 영원히 열립니다 — 구독도, 갱신도 없어요.",
+      plan_free:"Free",desc_free:"완전한 타이머, 영원히. 계정도 필요 없어요.",
+      plan_month:"월간",desc_month:"모든 Pro, 매월 결제.",plan_year:"연간",desc_year:"모든 Pro, 몇 달치 할인.",
+      plan_life:"평생",desc_life:"한 번 구매. 갱신 없는 Pro.",
+      price_note:"결제는 판매주체(MoR) Lemon Squeezy를 통해 처리됩니다 — 세금과 영수증 포함.",
+      install_eyebrow:"설치",install_h2:"Homebrew로 한 줄.",
+      install_lede:"Cloister는 서명·공증된 DMG와 Homebrew 캐스크로 제공되고, 스스로 최신을 유지합니다 — App Store도, 재다운로드도 없이.",
+      install_comment:"# tap 추가, 신뢰, 설치",
+      install_fine:"Homebrew 6.0+는 서드파티 tap의 캐스크를 설치하기 전에 신뢰를 요청합니다 — 가운데 줄이 그것입니다. 출시 후 이 상자가 실제로 작동하고, 지금은 미리보기입니다.",
+      faq_eyebrow:"자주 묻는 질문",faq_h2:"알아두면 좋아요.",
+      faq_q1:"내 데이터는 어디 있나요?",faq_a1:"당신의 Mac에요. Cloister는 세션을 로컬에 저장합니다 — 서버도, 쓰기 위해 만들 계정도 없습니다.",
+      faq_q2:"업데이트는 어떻게 되나요?",faq_a2:"앱이 서명된 채널로 백그라운드에서 스스로 업데이트해, 늘 최신입니다 — 재설치 필요 없어요.",
+      faq_q3:"어떤 macOS가 필요한가요?",faq_a3:"macOS 15 (Sequoia) 이상, Apple Silicon 또는 Intel.",
+      faq_q4:"무료 체험이 있나요?",faq_a4:"무료 티어가 곧 체험입니다 — 시간 제한 없는 완전한 집중 타이머. 긴 안목이 필요할 때 Pro로 올리세요.",
+      faq_q5:"구독 vs 평생?",faq_a5:"둘 다 동일한 Pro를 엽니다. 낮은 진입가로 구독하거나, 평생 라이선스를 한 번 사고 갱신은 없습니다.",
+      faq_q6:"환불은요?",faq_a6:"네 — 구매 후 14일 이내라면 이유를 묻지 않고 환불해 드려요. 이메일로 알려주시면 바로 처리해 드립니다.",
+      footer_tag:"자체 배포하는 macOS 집중 타이머.",
+      footer_pricing:"가격",footer_install:"설치",footer_faq:"FAQ",footer_privacy:"개인정보",footer_support:"지원"
+    },
+    ja:{
+      nav_app:"アプリ",nav_history:"集中の記録",nav_pricing:"価格",nav_install:"インストール",nav_soon:"近日公開",
+      hero_eyebrow:"Focus manager · macOS",hero_h1:"静かな<em>Cloister</em>で、<br>集中する時間を。",
+      hero_lede:"Cloister は Mac のメニューバーに住む、静かなポモドーロタイマー。セッションを始め、金色のリングが閉じるあいだに、集中した時間が一日また一日と積み上がるのを見守ります。",
+      hero_cta_soon:"近日公開",hero_cta_how:"使い方を見る ↓",
+      hero_note:"ネイティブのメニューバーアプリ · 自動アップデート · データは Mac の中だけ",ring_label:"集中",
+      ritual_eyebrow:"リチュアル",ritual_h2:"集中。休憩。スタック。",
+      ritual_lede:"ひとつの正直なループ、その繰り返し。集中と休憩をどちらも終えると、ひとつの<strong style=\"color:var(--gold-300);font-weight:600\">スタック</strong>になります — 今日が良い一日だったと教えてくれる、たったひとつの数字。",
+      step1_t:"集中",step1_d:"メニューバーからセッションを開始。時間が進むとリングが閉じ、画面のほかの何もあなたを呼びません。",
+      step2_t:"休憩",step2_d:"集中が終わったら、それにふさわしい休憩を。飛ばすとスタックは数えられません — 休みも仕事のうちです。",
+      step3_t:"スタック",step3_d:"集中と休憩を両方終えれば、ひとつのスタック。それらが連続記録、ヒートマップ、振り返れる時間になります。",
+      craft_eyebrow:"Mac のために",craft_h2:"邪魔をせず、メニューバーに住みます。",
+      craft_lede:"タップひとつでタイマーが開きます。金色のリングがメニューバーに乗り、ひと目で今どこにいるかがわかる — 探す窓も、気にする Dock アイコンもありません。",
+      shot_kicker:"スクリーンショット",craft_shot:"メニューバーのリング & ポップオーバー — リリース前に撮影予定",
+      craft_c1t:"メニューバータイマー",craft_c1d:"リングと残り時間がバーに。リング、カウントダウン、または両方を選べます。",
+      craft_c2t:"ウィジェット & Live Activity",craft_c2d:"デスクトップのタイマーウィジェット、そして iPhone に持ち出せばダイナミックアイランドの Live Activity。",
+      craft_c3t:"あなたの手で",craft_c3d:"システム・ライト・ダークのテーマ。6種のセッションサウンド。すべての操作にカスタムショートカット。",
+      stats_eyebrow:"集中の記録",stats_h2:"集中した時間を、帳簿のように。",
+      stats_lede:"すべてのスタックが記録されます。Cloister はそれを連続記録、1年分のヒートマップ、振り返る価値のある合計へと変えます — 日々が積み上がった静かな証。",
+      stats_weeks:"52週",stats_scale:"少ない · 多い",
+      stat1_lab:"日 現在の連続記録 — 自己最長",stat2_lab:"時間、通算の集中",stat3_lab:"スタック/日、30日平均",
+      feat_eyebrow:"無料 & Pro",feat_h2:"良いタイマーは無料。深さは望むときに。",
+      feat_lede:"Cloister を使う価値にするタイマーは、ずっと無料。Pro は長い視点を開きます — 全履歴、より多くのプリセット、そしてあなたのデータをあなたの手に。",
+      tag_free:"無料",free_title:"集中に必要なすべて",
+      free_1:"集中 & 休憩タイマー、リング、今日のスタック",free_2:"メニューバータイマー、ポップオーバー",
+      free_3:"編集できるプリセット1つ · テーマ · 6種のサウンド · ショートカット",free_4:"今週のスタック、最近のヒートマップ & 履歴",
+      tag_pro:"Pro",pro_title:"長い視点",
+      pro_1:"現在 & 最高の連続記録、通算時間、30日平均",pro_2:"全期間のヒートマップと無制限の履歴",
+      pro_3:"無制限のプリセット — 切り替えと並べ替え",pro_4:"データの書き出し & 読み込み(CSV · JSON)",
+      price_eyebrow:"価格",price_h2:"一度の支払いで、ずっとあなたのもの。",
+      price_lede:"一度の購入で Pro がずっと使えます — サブスクも更新もありません。",
+      plan_free:"無料",desc_free:"完全なタイマー、ずっと。アカウント不要。",
+      plan_month:"月額",desc_month:"すべての Pro、毎月。",plan_year:"年額",desc_year:"すべての Pro、数か月分お得。",
+      plan_life:"買い切り",desc_life:"一度の購入。更新のない Pro。",
+      price_note:"販売は登録販売者(MoR)の Lemon Squeezy を通じて — 税と領収書も対応。",
+      install_eyebrow:"インストール",install_h2:"Homebrew で一行。",
+      install_lede:"Cloister は署名・公証済みの DMG と Homebrew カスクで届き、自動で最新を保ちます — App Store も再ダウンロードも不要。",
+      install_comment:"# tap を追加、信頼、インストール",
+      install_fine:"Homebrew 6.0+ はサードパーティ tap のカスクを入れる前に信頼を求めます — それが真ん中の行です。リリース後にこの枠が有効になり、今はプレビューです。",
+      faq_eyebrow:"よくある質問",faq_h2:"知っておくと。",
+      faq_q1:"データはどこに?",faq_a1:"あなたの Mac の中です。Cloister はセッションをローカルに保存 — サーバーも、使うために作るアカウントもありません。",
+      faq_q2:"アップデートは?",faq_a2:"アプリが署名されたチャンネルでバックグラウンド更新するので、常に最新 — 再インストールは不要です。",
+      faq_q3:"必要な macOS は?",faq_a3:"macOS 15 (Sequoia) 以降、Apple Silicon または Intel。",
+      faq_q4:"無料体験は?",faq_a4:"無料ティアが体験そのもの — 時間制限のない完全なポモドーロタイマー。長い視点が欲しくなったら Pro へ。",
+      faq_q5:"サブスク vs 買い切り?",faq_a5:"どちらも同じ Pro を開きます。低い入口価格でサブスクするか、買い切りを一度だけ購入して更新なし。",
+      faq_q6:"返金は?",faq_a6:"登録販売者(MoR)の Lemon Squeezy が、購入時に示す明確な返金期間のもとで対応します。",
+      footer_tag:"自己配布の macOS ポモドーロタイマー。",
+      footer_pricing:"価格",footer_install:"インストール",footer_faq:"FAQ",footer_privacy:"プライバシー",footer_support:"サポート"
+    },
+    "zh-Hans":{
+      nav_app:"应用",nav_history:"专注记录",nav_pricing:"价格",nav_install:"安装",nav_soon:"即将推出",
+      hero_eyebrow:"Focus manager · macOS",hero_h1:"在静谧的<em>Cloister</em>里，<br>专注地工作。",
+      hero_lede:"Cloister 是一款住在 Mac 菜单栏里的沉静番茄钟。开始一段专注，看金色的环慢慢合拢，日复一日地看着专注的时间不断累积。",
+      hero_cta_soon:"即将推出",hero_cta_how:"看看怎么用 ↓",
+      hero_note:"原生菜单栏应用 · 自动更新 · 数据只留在你的 Mac",ring_label:"专注",
+      ritual_eyebrow:"仪式",ritual_h2:"专注。休息。堆叠。",
+      ritual_lede:"一个诚实的循环，反复进行。完成一次专注和它的休息，就成为一次<strong style=\"color:var(--gold-300);font-weight:600\">堆叠</strong> — 那个告诉你今天过得不错的数字。",
+      step1_t:"专注",step1_d:"从菜单栏开始一段专注。时间流逝，环随之合拢 — 屏幕上没有别的东西来打扰你。",
+      step2_t:"休息",step2_d:"专注结束，就享受它换来的休息。跳过它，这次堆叠便不算 — 休息也是工作的一部分。",
+      step3_t:"堆叠",step3_d:"专注加休息，都完成了，就是一次堆叠。它们汇成连续记录、热力图，和可以回望的时间。",
+      craft_eyebrow:"为 Mac 精心打造",craft_h2:"它住在菜单栏，而不挡你的路。",
+      craft_lede:"轻点一下，计时器就打开。金色的环停在菜单栏上，一眼便知进行到哪 — 无需找窗口，也不必操心 Dock 图标。",
+      shot_kicker:"截图",craft_shot:"菜单栏的环与弹窗 — 发布前拍摄",
+      craft_c1t:"菜单栏计时器",craft_c1d:"环与剩余时间就在栏上。可选环、倒计时，或两者都要。",
+      craft_c2t:"小组件与实时活动",craft_c2d:"桌面上的计时器小组件；带到 iPhone 时，灵动岛上的实时活动。",
+      craft_c3t:"随你调整",craft_c3d:"跟随系统、浅色或深色主题。六种会话提示音。每个操作都能自定义快捷键。",
+      stats_eyebrow:"专注记录",stats_h2:"你专注的时间，像账簿一样留存。",
+      stats_lede:"每一次堆叠都被记下。Cloister 把它们变成连续记录、整年的热力图，和值得回看的总计 — 日子确实累积了的静静佐证。",
+      stats_weeks:"52 周",stats_scale:"少 · 多",
+      stat1_lab:"天 当前连续 — 你的最长纪录",stat2_lab:"小时，累计专注",stat3_lab:"次堆叠/天，30 天平均",
+      feat_eyebrow:"免费 & Pro",feat_h2:"好用的计时器，免费。深度，随你所愿。",
+      feat_lede:"让 Cloister 值得一用的计时器，永久免费。Pro 打开长远的视野 — 完整历史、更多预设，以及把你的数据握在自己手里。",
+      tag_free:"免费",free_title:"专注所需的一切",
+      free_1:"专注 & 休息计时器、环、今日堆叠",free_2:"菜单栏计时器、弹窗",
+      free_3:"一个可编辑预设 · 主题 · 六种提示音 · 快捷键",free_4:"本周堆叠、近期热力图 & 历史",
+      tag_pro:"Pro",pro_title:"长远视野",
+      pro_1:"当前 & 最佳连续、累计小时、30 天平均",pro_2:"完整历史热力图与无限历史",
+      pro_3:"无限预设 — 切换与重排",pro_4:"导出 & 导入数据(CSV · JSON)",
+      price_eyebrow:"价格",price_h2:"一次买断，永久拥有。",
+      price_lede:"一次购买，永久解锁 Pro — 没有订阅，也无需续费。",
+      plan_free:"免费",desc_free:"完整的计时器，永久。无需账户。",
+      plan_month:"月付",desc_month:"全部 Pro，按月计费。",plan_year:"年付",desc_year:"全部 Pro，省下几个月。",
+      plan_life:"终身",desc_life:"买断一次。永不续费的 Pro。",
+      price_note:"通过我们的销售方(MoR) Lemon Squeezy 售出 — 税费与收据均已处理。",
+      install_eyebrow:"安装",install_h2:"用 Homebrew，一行搞定。",
+      install_lede:"Cloister 以签名并公证的 DMG 和 Homebrew cask 发布，并自动保持最新 — 无需 App Store，也无需重新下载。",
+      install_comment:"# 添加 tap、信任、安装",
+      install_fine:"Homebrew 6.0+ 会在安装第三方 tap 的 cask 前要求信任 — 就是中间那行。发布后此框将生效，如今只是预览。",
+      faq_eyebrow:"常见问题",faq_h2:"值得一提。",
+      faq_q1:"我的数据在哪里?",faq_a1:"在你的 Mac 上。Cloister 把会话保存在本地 — 没有服务器，也不用为了使用而注册账户。",
+      faq_q2:"更新怎么运作?",faq_a2:"应用通过签名通道在后台自我更新，始终最新 — 无需重装。",
+      faq_q3:"我需要哪个 macOS?",faq_a3:"macOS 15 (Sequoia) 或更新，Apple Silicon 或 Intel 均可。",
+      faq_q4:"有免费试用吗?",faq_a4:"免费层就是试用 — 一款没有时间限制的完整番茄钟。当长远视野值得时，再升级到 Pro。",
+      faq_q5:"订阅还是终身?",faq_a5:"两者解锁相同的 Pro。以更低门槛订阅，或一次买断终身、永不续费。",
+      faq_q6:"退款呢?",faq_a6:"由我们的销售方(MoR) Lemon Squeezy 处理，遵循结账时告知的明确退款期限。",
+      footer_tag:"一款自行分发的 macOS 番茄钟。",
+      footer_pricing:"价格",footer_install:"安装",footer_faq:"常见问题",footer_privacy:"隐私",footer_support:"支持"
+    },
+    "zh-Hant":{
+      nav_app:"應用程式",nav_history:"專注記錄",nav_pricing:"價格",nav_install:"安裝",nav_soon:"即將推出",
+      hero_eyebrow:"Focus manager · macOS",hero_h1:"在靜謐的<em>Cloister</em>裡，<br>專注地工作。",
+      hero_lede:"Cloister 是一款住在 Mac 選單列裡的沉靜番茄鐘。開始一段專注，看金色的環慢慢闔上，日復一日地看著專注的時間不斷累積。",
+      hero_cta_soon:"即將推出",hero_cta_how:"看看怎麼用 ↓",
+      hero_note:"原生選單列應用程式 · 自動更新 · 資料只留在你的 Mac",ring_label:"專注",
+      ritual_eyebrow:"儀式",ritual_h2:"專注。休息。堆疊。",
+      ritual_lede:"一個誠實的循環，反覆進行。完成一次專注與它的休息，就成為一次<strong style=\"color:var(--gold-300);font-weight:600\">堆疊</strong> — 那個告訴你今天過得不錯的數字。",
+      step1_t:"專注",step1_d:"從選單列開始一段專注。時間流逝，環隨之闔上 — 螢幕上沒有別的東西來打擾你。",
+      step2_t:"休息",step2_d:"專注結束，就享受它換來的休息。跳過它，這次堆疊便不算 — 休息也是工作的一部分。",
+      step3_t:"堆疊",step3_d:"專注加休息，都完成了，就是一次堆疊。它們匯成連續記錄、熱力圖，和可以回望的時間。",
+      craft_eyebrow:"為 Mac 精心打造",craft_h2:"它住在選單列，而不擋你的路。",
+      craft_lede:"輕點一下，計時器就打開。金色的環停在選單列上，一眼便知進行到哪 — 無需找視窗，也不必操心 Dock 圖示。",
+      shot_kicker:"截圖",craft_shot:"選單列的環與彈出視窗 — 發布前拍攝",
+      craft_c1t:"選單列計時器",craft_c1d:"環與剩餘時間就在列上。可選環、倒數，或兩者都要。",
+      craft_c2t:"小工具與即時動態",craft_c2d:"桌面上的計時器小工具；帶到 iPhone 時，動態島上的即時動態。",
+      craft_c3t:"隨你調整",craft_c3d:"跟隨系統、淺色或深色主題。六種工作階段提示音。每個操作都能自訂快捷鍵。",
+      stats_eyebrow:"專注記錄",stats_h2:"你專注的時間，像帳簿一樣留存。",
+      stats_lede:"每一次堆疊都被記下。Cloister 把它們變成連續記錄、整年的熱力圖，和值得回看的總計 — 日子確實累積了的靜靜佐證。",
+      stats_weeks:"52 週",stats_scale:"少 · 多",
+      stat1_lab:"天 目前連續 — 你的最長紀錄",stat2_lab:"小時，累計專注",stat3_lab:"次堆疊/天，30 天平均",
+      feat_eyebrow:"免費 & Pro",feat_h2:"好用的計時器，免費。深度，隨你所願。",
+      feat_lede:"讓 Cloister 值得一用的計時器，永久免費。Pro 打開長遠的視野 — 完整歷史、更多預設，以及把你的資料握在自己手裡。",
+      tag_free:"免費",free_title:"專注所需的一切",
+      free_1:"專注 & 休息計時器、環、今日堆疊",free_2:"選單列計時器、彈出視窗",
+      free_3:"一個可編輯預設 · 主題 · 六種提示音 · 快捷鍵",free_4:"本週堆疊、近期熱力圖 & 歷史",
+      tag_pro:"Pro",pro_title:"長遠視野",
+      pro_1:"目前 & 最佳連續、累計小時、30 天平均",pro_2:"完整歷史熱力圖與無限歷史",
+      pro_3:"無限預設 — 切換與重新排列",pro_4:"匯出 & 匯入資料(CSV · JSON)",
+      price_eyebrow:"價格",price_h2:"一次買斷，永久擁有。",
+      price_lede:"一次購買，永久解鎖 Pro — 沒有訂閱，也無需續費。",
+      plan_free:"免費",desc_free:"完整的計時器，永久。無需帳戶。",
+      plan_month:"月付",desc_month:"全部 Pro，按月計費。",plan_year:"年付",desc_year:"全部 Pro，省下幾個月。",
+      plan_life:"終身",desc_life:"買斷一次。永不續費的 Pro。",
+      price_note:"透過我們的銷售方(MoR) Lemon Squeezy 售出 — 稅費與收據均已處理。",
+      install_eyebrow:"安裝",install_h2:"用 Homebrew，一行搞定。",
+      install_lede:"Cloister 以簽名並公證的 DMG 和 Homebrew cask 發布，並自動保持最新 — 無需 App Store，也無需重新下載。",
+      install_comment:"# 加入 tap、信任、安裝",
+      install_fine:"Homebrew 6.0+ 會在安裝第三方 tap 的 cask 前要求信任 — 就是中間那行。發布後此框將生效，如今只是預覽。",
+      faq_eyebrow:"常見問題",faq_h2:"值得一提。",
+      faq_q1:"我的資料在哪裡?",faq_a1:"在你的 Mac 上。Cloister 把工作階段儲存在本機 — 沒有伺服器，也不用為了使用而註冊帳戶。",
+      faq_q2:"更新怎麼運作?",faq_a2:"應用程式透過簽名通道在背景自我更新，始終最新 — 無需重裝。",
+      faq_q3:"我需要哪個 macOS?",faq_a3:"macOS 15 (Sequoia) 或更新，Apple Silicon 或 Intel 皆可。",
+      faq_q4:"有免費試用嗎?",faq_a4:"免費層就是試用 — 一款沒有時間限制的完整番茄鐘。當長遠視野值得時，再升級到 Pro。",
+      faq_q5:"訂閱還是終身?",faq_a5:"兩者解鎖相同的 Pro。以更低門檻訂閱，或一次買斷終身、永不續費。",
+      faq_q6:"退款呢?",faq_a6:"由我們的銷售方(MoR) Lemon Squeezy 處理，遵循結帳時告知的明確退款期限。",
+      footer_tag:"一款自行分發的 macOS 番茄鐘。",
+      footer_pricing:"價格",footer_install:"安裝",footer_faq:"常見問題",footer_privacy:"隱私",footer_support:"支援"
+    },
+    es:{
+      nav_app:"La app",nav_history:"Historial de foco",nav_pricing:"Precios",nav_install:"Instalar",nav_soon:"Muy pronto",
+      hero_eyebrow:"Focus manager · para macOS",hero_h1:"Un <em>Cloister</em> tranquilo<br>para trabajar concentrado.",
+      hero_lede:"Cloister es un temporizador Pomodoro sereno que vive en la barra de menús de tu Mac. Inicia una sesión, deja que el anillo dorado se cierre y mira cómo tus horas de foco se acumulan, un día tranquilo tras otro.",
+      hero_cta_soon:"Muy pronto",hero_cta_how:"Mira cómo funciona ↓",
+      hero_note:"App nativa en la barra de menús · se actualiza sola · tus datos se quedan en tu Mac",ring_label:"Foco",
+      ritual_eyebrow:"El ritual",ritual_h2:"Foco. Descanso. Pila.",
+      ritual_lede:"Un bucle honesto, repetido. Un foco terminado y su descanso forman una <strong style=\"color:var(--gold-300);font-weight:600\">pila</strong>: el único número que te dice que el día fue bien.",
+      step1_t:"Foco",step1_d:"Inicia una sesión desde la barra de menús. El anillo se cierra mientras corre tu tiempo, y nada más en pantalla te reclama.",
+      step2_t:"Descanso",step2_d:"Cuando el foco termina, toma el descanso que ganó. Si lo saltas, la pila no cuenta: el descanso es parte del trabajo.",
+      step3_t:"Pila",step3_d:"Foco más descanso, ambos completados, es una pila. Se reúnen en rachas, mapas de calor y horas para mirar atrás.",
+      craft_eyebrow:"Hecho para el Mac",craft_h2:"Vive en la barra de menús, sin estorbar.",
+      craft_lede:"Un toque abre el temporizador. El anillo dorado va en tu barra de menús: de un vistazo sabes dónde estás, sin ventana que buscar ni icono en el Dock del que ocuparte.",
+      shot_kicker:"Captura",craft_shot:"Anillo y popover de la barra de menús — se capturará antes del lanzamiento",
+      craft_c1t:"Temporizador en la barra",craft_c1d:"El anillo y el tiempo restante en la barra. Elige el anillo, la cuenta atrás, o ambos.",
+      craft_c2t:"Widgets y Live Activity",craft_c2d:"Un widget de temporizador en tu escritorio, y Live Activity en la Dynamic Island cuando lo llevas al iPhone.",
+      craft_c3t:"A tu manera",craft_c3d:"Temas del sistema, claro u oscuro. Seis sonidos de sesión. Atajos de teclado personalizados para cada acción.",
+      stats_eyebrow:"Historial de foco",stats_h2:"Tus horas de foco, guardadas como un libro mayor.",
+      stats_lede:"Cada pila queda anotada. Cloister las convierte en rachas, un mapa de calor de todo el año y totales a los que vale la pena volver: la prueba serena de que los días sumaron.",
+      stats_weeks:"52 semanas",stats_scale:"Menos · Más",
+      stat1_lab:"días de racha actual — la más larga hasta ahora",stat2_lab:"horas de foco, en total",stat3_lab:"pilas al día, promedio de 30 días",
+      feat_eyebrow:"Gratis y Pro",feat_h2:"Un gran temporizador, gratis. Profundidad cuando quieras.",
+      feat_lede:"El temporizador que hace que Cloister valga la pena es gratis para siempre. Pro abre la vista larga: historial completo, más ajustes y tus datos en tus manos.",
+      tag_free:"Gratis",free_title:"Todo para concentrarte",
+      free_1:"Temporizador de foco y descanso, anillo, pila de hoy",free_2:"Temporizador en la barra, popover",
+      free_3:"Un ajuste editable · temas · seis sonidos · atajos",free_4:"Pilas de esta semana, mapa de calor e historial recientes",
+      tag_pro:"Pro",pro_title:"La vista larga",
+      pro_1:"Racha actual y mejor, horas totales, promedio de 30 días",pro_2:"Mapa de calor de todo el historial e historial ilimitado",
+      pro_3:"Ajustes ilimitados — cambia y reordena",pro_4:"Exporta e importa tus datos (CSV · JSON)",
+      price_eyebrow:"Precios",price_h2:"Paga una vez. Tuyo para siempre.",
+      price_lede:"Una compra desbloquea Pro para siempre: sin suscripción, sin renovaciones.",
+      plan_free:"Gratis",desc_free:"El temporizador completo, para siempre. Sin cuenta.",
+      plan_month:"Mensual",desc_month:"Todo Pro, facturado al mes.",plan_year:"Anual",desc_year:"Todo Pro, con unos meses de regalo.",
+      plan_life:"De por vida",desc_life:"Paga una vez. Un Pro que nunca se renueva.",
+      price_note:"Vendido a través de Lemon Squeezy, nuestro comerciante registrado: impuestos y recibos incluidos.",
+      install_eyebrow:"Instalar",install_h2:"Una línea con Homebrew.",
+      install_lede:"Cloister se distribuye como un DMG firmado y notarizado y un cask de Homebrew, y se mantiene al día solo: sin App Store, sin volver a descargar.",
+      install_comment:"# añade el tap, dale confianza, instala",
+      install_fine:"Homebrew 6.0+ te pide confiar en un tap de terceros antes de instalar sus casks: esa es la línea del medio. Tras el lanzamiento este cuadro se activa; hoy es una vista previa.",
+      faq_eyebrow:"Preguntas",faq_h2:"Bueno saberlo.",
+      faq_q1:"¿Dónde están mis datos?",faq_a1:"En tu Mac. Cloister guarda tus sesiones localmente: no hay servidor ni cuenta que crear solo para usarlo.",
+      faq_q2:"¿Cómo se actualiza?",faq_a2:"La app se actualiza sola en segundo plano por un canal firmado, así siempre tienes lo último, sin reinstalar.",
+      faq_q3:"¿Qué macOS necesito?",faq_a3:"macOS 15 (Sequoia) o posterior, en Apple Silicon o Intel.",
+      faq_q4:"¿Hay prueba gratis?",faq_a4:"El plan gratis es la prueba: un Pomodoro completo sin límite de tiempo. Pasa a Pro cuando la vista larga valga la pena.",
+      faq_q5:"¿Suscripción o de por vida?",faq_a5:"Ambas desbloquean el mismo Pro. Suscríbete por un precio de entrada menor, o compra la licencia de por vida una vez y no la renueves nunca.",
+      faq_q6:"¿Reembolsos?",faq_a6:"Los gestiona Lemon Squeezy, nuestro comerciante registrado, con un plazo claro que se muestra al pagar.",
+      footer_tag:"Un temporizador Pomodoro de distribución propia para macOS.",
+      footer_pricing:"Precios",footer_install:"Instalar",footer_faq:"Preguntas",footer_privacy:"Privacidad",footer_support:"Soporte"
+    },
+    fr:{
+      nav_app:"L'app",nav_history:"Historique de focus",nav_pricing:"Tarifs",nav_install:"Installer",nav_soon:"Bientôt",
+      hero_eyebrow:"Focus manager · pour macOS",hero_h1:"Un <em>Cloister</em> paisible<br>pour travailler concentré.",
+      hero_lede:"Cloister est un minuteur Pomodoro serein qui vit dans la barre des menus de votre Mac. Lancez une session, laissez l'anneau doré se refermer, et regardez vos heures de concentration s'empiler, un jour paisible après l'autre.",
+      hero_cta_soon:"Bientôt",hero_cta_how:"Voir comment ça marche ↓",
+      hero_note:"App native dans la barre des menus · se met à jour seule · vos données restent sur votre Mac",ring_label:"Focus",
+      ritual_eyebrow:"Le rituel",ritual_h2:"Focus. Pause. Pile.",
+      ritual_lede:"Une boucle honnête, répétée. Un focus terminé et sa pause forment une <strong style=\"color:var(--gold-300);font-weight:600\">pile</strong> — le seul chiffre qui vous dit que la journée s'est bien passée.",
+      step1_t:"Focus",step1_d:"Lancez une session depuis la barre des menus. L'anneau se referme à mesure que le temps s'écoule — rien d'autre à l'écran ne vous réclame.",
+      step2_t:"Pause",step2_d:"Quand le focus s'achève, prenez la pause qu'il a méritée. Sautez-la et la pile ne compte pas — le repos fait partie du travail.",
+      step3_t:"Pile",step3_d:"Focus plus pause, tous deux terminés, font une pile. Elles se rassemblent en séries, cartes de chaleur et heures à revoir.",
+      craft_eyebrow:"Pensé pour le Mac",craft_h2:"Il vit dans la barre des menus, sans vous gêner.",
+      craft_lede:"Une pression ouvre le minuteur. L'anneau doré loge dans votre barre des menus : d'un coup d'œil vous savez où vous en êtes — aucune fenêtre à chercher, aucune icône du Dock à surveiller.",
+      shot_kicker:"Capture",craft_shot:"Anneau et popover de la barre des menus — capturé avant le lancement",
+      craft_c1t:"Minuteur dans la barre",craft_c1d:"L'anneau et le temps restant dans la barre. Choisissez l'anneau, le compte à rebours, ou les deux.",
+      craft_c2t:"Widgets et Live Activity",craft_c2d:"Un widget minuteur sur votre bureau, et Live Activity sur la Dynamic Island quand vous l'emportez sur iPhone.",
+      craft_c3t:"À votre main",craft_c3d:"Thèmes système, clair ou sombre. Six sons de session. Des raccourcis clavier personnalisés pour chaque action.",
+      stats_eyebrow:"Historique de focus",stats_h2:"Vos heures de concentration, tenues comme un registre.",
+      stats_lede:"Chaque pile est notée. Cloister les transforme en séries, en carte de chaleur sur un an et en totaux qui valent le retour — la preuve tranquille que les jours ont compté.",
+      stats_weeks:"52 semaines",stats_scale:"Moins · Plus",
+      stat1_lab:"jours de série en cours — votre record",stat2_lab:"heures de focus, au total",stat3_lab:"piles par jour, moyenne sur 30 jours",
+      feat_eyebrow:"Gratuit et Pro",feat_h2:"Un excellent minuteur, gratuit. La profondeur quand vous voulez.",
+      feat_lede:"Le minuteur qui rend Cloister utile est gratuit pour toujours. Pro ouvre la vue longue : historique complet, plus de préréglages, et vos données entre vos mains.",
+      tag_free:"Gratuit",free_title:"Tout pour se concentrer",
+      free_1:"Minuteur focus et pause, anneau, pile du jour",free_2:"Minuteur dans la barre, popover",
+      free_3:"Un préréglage modifiable · thèmes · six sons · raccourcis",free_4:"Piles de la semaine, carte de chaleur et historique récents",
+      tag_pro:"Pro",pro_title:"La vue longue",
+      pro_1:"Série en cours et meilleure, heures cumulées, moyenne sur 30 jours",pro_2:"Carte de chaleur sur tout l'historique et historique illimité",
+      pro_3:"Préréglages illimités — changez et réordonnez",pro_4:"Exportez et importez vos données (CSV · JSON)",
+      price_eyebrow:"Tarifs",price_h2:"Payez une fois. À vous pour toujours.",
+      price_lede:"Un seul achat débloque Pro pour toujours — sans abonnement, sans renouvellement.",
+      plan_free:"Gratuit",desc_free:"Le minuteur complet, pour toujours. Sans compte.",
+      plan_month:"Mensuel",desc_month:"Tout Pro, facturé au mois.",plan_year:"Annuel",desc_year:"Tout Pro, quelques mois offerts.",
+      plan_life:"À vie",desc_life:"Achetez une fois. Un Pro qui ne se renouvelle jamais.",
+      price_note:"Vendu via Lemon Squeezy, notre revendeur officiel — taxes et reçus pris en charge.",
+      install_eyebrow:"Installer",install_h2:"Une ligne avec Homebrew.",
+      install_lede:"Cloister est livré en DMG signé et notarisé et en cask Homebrew, et se tient à jour tout seul — sans App Store, sans re-téléchargement.",
+      install_comment:"# ajoutez le tap, faites-lui confiance, installez",
+      install_fine:"Homebrew 6.0+ vous demande de faire confiance à un tap tiers avant d'installer ses casks — c'est la ligne du milieu. Après le lancement, ce cadre s'active ; aujourd'hui, c'est un aperçu.",
+      faq_eyebrow:"Questions",faq_h2:"Bon à savoir.",
+      faq_q1:"Où sont mes données ?",faq_a1:"Sur votre Mac. Cloister enregistre vos sessions en local — pas de serveur, pas de compte à créer juste pour l'utiliser.",
+      faq_q2:"Comment se font les mises à jour ?",faq_a2:"L'app se met à jour seule en arrière-plan via un canal signé, donc toujours à jour — sans réinstaller.",
+      faq_q3:"Quel macOS faut-il ?",faq_a3:"macOS 15 (Sequoia) ou plus récent, sur Apple Silicon ou Intel.",
+      faq_q4:"Y a-t-il un essai gratuit ?",faq_a4:"L'offre gratuite est l'essai — un Pomodoro complet sans limite de temps. Passez à Pro quand la vue longue en vaut la peine.",
+      faq_q5:"Abonnement ou à vie ?",faq_a5:"Les deux débloquent le même Pro. Abonnez-vous à un prix d'entrée plus bas, ou achetez la licence à vie une fois, sans renouvellement.",
+      faq_q6:"Remboursements ?",faq_a6:"Gérés par Lemon Squeezy, notre revendeur officiel, dans un délai clair indiqué au paiement.",
+      footer_tag:"Un minuteur Pomodoro auto-distribué pour macOS.",
+      footer_pricing:"Tarifs",footer_install:"Installer",footer_faq:"Questions",footer_privacy:"Confidentialité",footer_support:"Assistance"
+    },
+    de:{
+      nav_app:"Die App",nav_history:"Fokus-Verlauf",nav_pricing:"Preise",nav_install:"Installieren",nav_soon:"Demnächst",
+      hero_eyebrow:"Focus manager · für macOS",hero_h1:"Ein stiller <em>Cloister</em><br>für konzentriertes Arbeiten.",
+      hero_lede:"Cloister ist ein ruhiger Pomodoro-Timer, der in der Menüleiste deines Mac wohnt. Starte eine Sitzung, lass den goldenen Ring sich schließen und sieh zu, wie sich deine fokussierten Stunden stapeln — ein stiller Tag nach dem anderen.",
+      hero_cta_soon:"Demnächst",hero_cta_how:"So funktioniert's ↓",
+      hero_note:"Native Menüleisten-App · aktualisiert sich selbst · deine Daten bleiben auf deinem Mac",ring_label:"Fokus",
+      ritual_eyebrow:"Das Ritual",ritual_h2:"Fokus. Pause. Stapel.",
+      ritual_lede:"Eine ehrliche Schleife, wiederholt. Ein abgeschlossener Fokus und seine Pause ergeben einen <strong style=\"color:var(--gold-300);font-weight:600\">Stapel</strong> — die eine Zahl, die dir sagt, dass der Tag gut lief.",
+      step1_t:"Fokus",step1_d:"Starte eine Sitzung aus der Menüleiste. Der Ring schließt sich, während die Zeit läuft — nichts sonst auf dem Bildschirm verlangt nach dir.",
+      step2_t:"Pause",step2_d:"Endet der Fokus, nimm die verdiente Pause. Überspringst du sie, zählt der Stapel nicht — Ruhe gehört zur Arbeit.",
+      step3_t:"Stapel",step3_d:"Fokus plus Pause, beide beendet, ergeben einen Stapel. Sie sammeln sich zu Serien, Heatmaps und Stunden, auf die du zurückblicken kannst.",
+      craft_eyebrow:"Für den Mac gemacht",craft_h2:"Er wohnt in der Menüleiste, nicht im Weg.",
+      craft_lede:"Ein Tippen öffnet den Timer. Der goldene Ring sitzt in deiner Menüleiste, ein Blick genügt — kein Fenster zu suchen, kein Dock-Symbol im Kopf.",
+      shot_kicker:"Screenshot",craft_shot:"Menüleisten-Ring & Popover — vor dem Launch aufgenommen",
+      craft_c1t:"Timer in der Menüleiste",craft_c1d:"Ring und Restzeit sitzen in der Leiste. Wähle den Ring, den Countdown oder beides.",
+      craft_c2t:"Widgets & Live Activity",craft_c2d:"Ein Timer-Widget auf dem Schreibtisch und Live Activity in der Dynamic Island, wenn du ihn aufs iPhone mitnimmst.",
+      craft_c3t:"Ganz nach dir",craft_c3d:"System-, helle oder dunkle Themes. Sechs Sitzungssounds. Eigene Tastenkürzel für jede Aktion.",
+      stats_eyebrow:"Fokus-Verlauf",stats_h2:"Deine Fokusstunden, geführt wie ein Kontobuch.",
+      stats_lede:"Jeder Stapel wird notiert. Cloister macht daraus Serien, eine Heatmap übers Jahr und Summen, zu denen man gern zurückkehrt — der stille Beweis, dass sich die Tage summiert haben.",
+      stats_weeks:"52 Wochen",stats_scale:"Weniger · Mehr",
+      stat1_lab:"Tage aktuelle Serie — deine längste bisher",stat2_lab:"Stunden Fokus, insgesamt",stat3_lab:"Stapel pro Tag, 30-Tage-Schnitt",
+      feat_eyebrow:"Gratis & Pro",feat_h2:"Ein großartiger Timer, gratis. Tiefe, wenn du willst.",
+      feat_lede:"Der Timer, der Cloister wertvoll macht, ist für immer gratis. Pro öffnet den langen Blick — vollständiger Verlauf, mehr Presets und deine Daten in deiner Hand.",
+      tag_free:"Gratis",free_title:"Alles zum Fokussieren",
+      free_1:"Fokus- & Pausen-Timer, Ring, heutiger Stapel",free_2:"Menüleisten-Timer und Popover",
+      free_3:"Ein bearbeitbares Preset · Themes · sechs Sounds · Kürzel",free_4:"Stapel dieser Woche, jüngste Heatmap & Verlauf",
+      tag_pro:"Pro",pro_title:"Der lange Blick",
+      pro_1:"Aktuelle & beste Serie, Gesamtstunden, 30-Tage-Schnitt",pro_2:"Heatmap über den gesamten Verlauf und unbegrenzter Verlauf",
+      pro_3:"Unbegrenzte Presets — wechseln und neu ordnen",pro_4:"Daten exportieren & importieren (CSV · JSON)",
+      price_eyebrow:"Preise",price_h2:"Einmal zahlen. Für immer deins.",
+      price_lede:"Ein Kauf schaltet Pro für immer frei — kein Abo, keine Verlängerung.",
+      plan_free:"Gratis",desc_free:"Der volle Timer, für immer. Kein Konto nötig.",
+      plan_month:"Monatlich",desc_month:"Ganz Pro, monatlich abgerechnet.",plan_year:"Jährlich",desc_year:"Ganz Pro, ein paar Monate geschenkt.",
+      plan_life:"Lifetime",desc_life:"Einmal kaufen. Ein Pro, das sich nie verlängert.",
+      price_note:"Verkauf über Lemon Squeezy, unseren Merchant of Record — Steuern und Belege inklusive.",
+      install_eyebrow:"Installieren",install_h2:"Eine Zeile mit Homebrew.",
+      install_lede:"Cloister kommt als signiertes, notarisiertes DMG und als Homebrew-Cask und hält sich selbst aktuell — ohne App Store, ohne erneuten Download.",
+      install_comment:"# Tap hinzufügen, vertrauen, installieren",
+      install_fine:"Homebrew 6.0+ bittet dich, einem Drittanbieter-Tap zu vertrauen, bevor du seine Casks installierst — das ist die mittlere Zeile. Nach dem Launch wird dieser Kasten aktiv; heute ist es eine Vorschau.",
+      faq_eyebrow:"Fragen",faq_h2:"Gut zu wissen.",
+      faq_q1:"Wo liegen meine Daten?",faq_a1:"Auf deinem Mac. Cloister speichert deine Sitzungen lokal — kein Server, kein Konto, nur um es zu nutzen.",
+      faq_q2:"Wie funktionieren Updates?",faq_a2:"Die App aktualisiert sich im Hintergrund über einen signierten Kanal, du hast also immer die neueste Version — ohne Neuinstallation.",
+      faq_q3:"Welches macOS brauche ich?",faq_a3:"macOS 15 (Sequoia) oder neuer, auf Apple Silicon oder Intel.",
+      faq_q4:"Gibt es eine kostenlose Testphase?",faq_a4:"Die Gratis-Stufe ist die Testphase — ein vollständiger Pomodoro-Timer ohne Zeitlimit. Wechsle zu Pro, wenn der lange Blick es wert ist.",
+      faq_q5:"Abo oder Lifetime?",faq_a5:"Beide schalten dasselbe Pro frei. Abonniere zum niedrigeren Einstiegspreis, oder kauf die Lifetime-Lizenz einmal — ohne Verlängerung.",
+      faq_q6:"Rückerstattungen?",faq_a6:"Abgewickelt von Lemon Squeezy, unserem Merchant of Record, mit einer klaren Frist, die beim Kauf angezeigt wird.",
+      footer_tag:"Ein selbst vertriebener Pomodoro-Timer für macOS.",
+      footer_pricing:"Preise",footer_install:"Installieren",footer_faq:"Fragen",footer_privacy:"Datenschutz",footer_support:"Support"
+    },
+    "pt-BR":{
+      nav_app:"O app",nav_history:"Histórico de foco",nav_pricing:"Preços",nav_install:"Instalar",nav_soon:"Em breve",
+      hero_eyebrow:"Focus manager · para macOS",hero_h1:"Um <em>Cloister</em> tranquilo<br>para trabalhar concentrado.",
+      hero_lede:"O Cloister é um timer Pomodoro sereno que vive na barra de menus do seu Mac. Comece uma sessão, deixe o anel dourado se fechar e veja suas horas de foco se empilharem, um dia tranquilo após o outro.",
+      hero_cta_soon:"Em breve",hero_cta_how:"Veja como funciona ↓",
+      hero_note:"App nativo na barra de menus · se atualiza sozinho · seus dados ficam no seu Mac",ring_label:"Foco",
+      ritual_eyebrow:"O ritual",ritual_h2:"Foco. Pausa. Pilha.",
+      ritual_lede:"Um ciclo honesto, repetido. Um foco concluído e sua pausa formam uma <strong style=\"color:var(--gold-300);font-weight:600\">pilha</strong> — o único número que diz que o dia foi bom.",
+      step1_t:"Foco",step1_d:"Comece uma sessão pela barra de menus. O anel se fecha enquanto o tempo corre — nada mais na tela chama por você.",
+      step2_t:"Pausa",step2_d:"Quando o foco acaba, faça a pausa que ele mereceu. Pule-a e a pilha não conta — o descanso é parte do trabalho.",
+      step3_t:"Pilha",step3_d:"Foco mais pausa, ambos concluídos, é uma pilha. Elas se juntam em sequências, mapas de calor e horas para revisitar.",
+      craft_eyebrow:"Feito para o Mac",craft_h2:"Vive na barra de menus, sem atrapalhar.",
+      craft_lede:"Um toque abre o timer. O anel dourado fica na sua barra de menus: de relance você sabe onde está — sem janela para procurar, sem ícone no Dock para se preocupar.",
+      shot_kicker:"Captura",craft_shot:"Anel e popover da barra de menus — capturado antes do lançamento",
+      craft_c1t:"Timer na barra de menus",craft_c1d:"O anel e o tempo restante ficam na barra. Escolha o anel, a contagem regressiva, ou os dois.",
+      craft_c2t:"Widgets e Live Activity",craft_c2d:"Um widget de timer na sua mesa e Live Activity na Dynamic Island quando você o leva ao iPhone.",
+      craft_c3t:"Do seu jeito",craft_c3d:"Temas do sistema, claro ou escuro. Seis sons de sessão. Atalhos de teclado personalizados para cada ação.",
+      stats_eyebrow:"Histórico de foco",stats_h2:"Suas horas de foco, guardadas como um livro-razão.",
+      stats_lede:"Cada pilha é anotada. O Cloister as transforma em sequências, um mapa de calor de um ano e totais que valem a revisita — a prova serena de que os dias somaram.",
+      stats_weeks:"52 semanas",stats_scale:"Menos · Mais",
+      stat1_lab:"dias de sequência atual — a sua mais longa",stat2_lab:"horas de foco, no total",stat3_lab:"pilhas por dia, média de 30 dias",
+      feat_eyebrow:"Grátis e Pro",feat_h2:"Um ótimo timer, grátis. Profundidade quando quiser.",
+      feat_lede:"O timer que faz o Cloister valer a pena é grátis para sempre. O Pro abre a visão longa: histórico completo, mais presets e seus dados nas suas mãos.",
+      tag_free:"Grátis",free_title:"Tudo para focar",
+      free_1:"Timer de foco e pausa, anel, pilha de hoje",free_2:"Timer na barra de menus, popover",
+      free_3:"Um preset editável · temas · seis sons · atalhos",free_4:"Pilhas desta semana, mapa de calor e histórico recentes",
+      tag_pro:"Pro",pro_title:"A visão longa",
+      pro_1:"Sequência atual e recorde, horas totais, média de 30 dias",pro_2:"Mapa de calor de todo o histórico e histórico ilimitado",
+      pro_3:"Presets ilimitados — troque e reordene",pro_4:"Exporte e importe seus dados (CSV · JSON)",
+      price_eyebrow:"Preços",price_h2:"Pague uma vez. Seu para sempre.",
+      price_lede:"Uma compra desbloqueia o Pro para sempre — sem assinatura, sem renovações.",
+      plan_free:"Grátis",desc_free:"O timer completo, para sempre. Sem conta.",
+      plan_month:"Mensal",desc_month:"Todo o Pro, cobrado por mês.",plan_year:"Anual",desc_year:"Todo o Pro, alguns meses de brinde.",
+      plan_life:"Vitalício",desc_life:"Pague uma vez. Um Pro que nunca renova.",
+      price_note:"Vendido pela Lemon Squeezy, nosso revendedor oficial — impostos e recibos incluídos.",
+      install_eyebrow:"Instalar",install_h2:"Uma linha com o Homebrew.",
+      install_lede:"O Cloister é distribuído como um DMG assinado e notarizado e um cask do Homebrew, e se mantém atualizado sozinho — sem App Store, sem rebaixar.",
+      install_comment:"# adicione o tap, confie, instale",
+      install_fine:"O Homebrew 6.0+ pede que você confie em um tap de terceiros antes de instalar seus casks — é a linha do meio. Após o lançamento esta caixa fica ativa; hoje é uma prévia.",
+      faq_eyebrow:"Perguntas",faq_h2:"Bom saber.",
+      faq_q1:"Onde ficam meus dados?",faq_a1:"No seu Mac. O Cloister guarda suas sessões localmente — sem servidor e sem conta para criar só para usar.",
+      faq_q2:"Como funcionam as atualizações?",faq_a2:"O app se atualiza em segundo plano por um canal assinado, então você sempre tem a última versão — sem reinstalar.",
+      faq_q3:"De qual macOS eu preciso?",faq_a3:"macOS 15 (Sequoia) ou mais recente, em Apple Silicon ou Intel.",
+      faq_q4:"Tem teste grátis?",faq_a4:"O plano grátis é o teste — um Pomodoro completo sem limite de tempo. Vá para o Pro quando a visão longa valer a pena.",
+      faq_q5:"Assinatura ou vitalício?",faq_a5:"Ambos desbloqueiam o mesmo Pro. Assine por um preço de entrada menor, ou compre a licença vitalícia uma vez e nunca renove.",
+      faq_q6:"Reembolsos?",faq_a6:"Feitos pela Lemon Squeezy, nosso revendedor oficial, dentro de um prazo claro mostrado no checkout.",
+      footer_tag:"Um timer Pomodoro de distribuição própria para macOS.",
+      footer_pricing:"Preços",footer_install:"Instalar",footer_faq:"Perguntas",footer_privacy:"Privacidade",footer_support:"Suporte"
+    },
+    it:{
+      nav_app:"L'app",nav_history:"Cronologia del focus",nav_pricing:"Prezzi",nav_install:"Installa",nav_soon:"In arrivo",
+      hero_eyebrow:"Focus manager · per macOS",hero_h1:"Un <em>Cloister</em> tranquillo<br>per lavorare concentrati.",
+      hero_lede:"Cloister è un timer Pomodoro sereno che vive nella barra dei menu del tuo Mac. Avvia una sessione, lascia che l'anello dorato si chiuda e guarda le tue ore di concentrazione accumularsi, un giorno tranquillo dopo l'altro.",
+      hero_cta_soon:"In arrivo",hero_cta_how:"Guarda come funziona ↓",
+      hero_note:"App nativa nella barra dei menu · si aggiorna da sola · i tuoi dati restano sul tuo Mac",ring_label:"Focus",
+      ritual_eyebrow:"Il rito",ritual_h2:"Focus. Pausa. Pila.",
+      ritual_lede:"Un ciclo onesto, ripetuto. Un focus completato e la sua pausa formano una <strong style=\"color:var(--gold-300);font-weight:600\">pila</strong> — l'unico numero che ti dice che la giornata è andata bene.",
+      step1_t:"Focus",step1_d:"Avvia una sessione dalla barra dei menu. L'anello si chiude mentre il tempo scorre — nient'altro sullo schermo ti reclama.",
+      step2_t:"Pausa",step2_d:"Quando il focus finisce, prenditi la pausa che si è guadagnata. Saltala e la pila non conta — il riposo fa parte del lavoro.",
+      step3_t:"Pila",step3_d:"Focus più pausa, entrambi conclusi, fanno una pila. Si raccolgono in serie, mappe di calore e ore su cui tornare.",
+      craft_eyebrow:"Fatto per il Mac",craft_h2:"Vive nella barra dei menu, senza intralciarti.",
+      craft_lede:"Un tocco apre il timer. L'anello dorato sta nella tua barra dei menu: un'occhiata e sai a che punto sei — nessuna finestra da cercare, nessuna icona nel Dock a cui pensare.",
+      shot_kicker:"Schermata",craft_shot:"Anello e popover della barra dei menu — catturato prima del lancio",
+      craft_c1t:"Timer nella barra dei menu",craft_c1d:"Anello e tempo rimanente stanno nella barra. Scegli l'anello, il conto alla rovescia, o entrambi.",
+      craft_c2t:"Widget e Live Activity",craft_c2d:"Un widget timer sulla scrivania e Live Activity sulla Dynamic Island quando lo porti su iPhone.",
+      craft_c3t:"A modo tuo",craft_c3d:"Temi di sistema, chiaro o scuro. Sei suoni di sessione. Scorciatoie da tastiera personalizzate per ogni azione.",
+      stats_eyebrow:"Cronologia del focus",stats_h2:"Le tue ore di concentrazione, tenute come un registro.",
+      stats_lede:"Ogni pila viene annotata. Cloister le trasforma in serie, una mappa di calore lunga un anno e totali su cui vale la pena tornare — la prova silenziosa che i giorni hanno fatto la somma.",
+      stats_weeks:"52 settimane",stats_scale:"Meno · Più",
+      stat1_lab:"giorni di serie attuale — la tua più lunga",stat2_lab:"ore di focus, in totale",stat3_lab:"pile al giorno, media a 30 giorni",
+      feat_eyebrow:"Gratis e Pro",feat_h2:"Un ottimo timer, gratis. Profondità quando vuoi.",
+      feat_lede:"Il timer che rende Cloister utile è gratis per sempre. Pro apre la vista lunga: cronologia completa, più preset e i tuoi dati nelle tue mani.",
+      tag_free:"Gratis",free_title:"Tutto per concentrarti",
+      free_1:"Timer focus e pausa, anello, pila di oggi",free_2:"Timer nella barra dei menu, popover",
+      free_3:"Un preset modificabile · temi · sei suoni · scorciatoie",free_4:"Pile di questa settimana, mappa di calore e cronologia recenti",
+      tag_pro:"Pro",pro_title:"La vista lunga",
+      pro_1:"Serie attuale e migliore, ore totali, media a 30 giorni",pro_2:"Mappa di calore dell'intera cronologia e cronologia illimitata",
+      pro_3:"Preset illimitati — cambia e riordina",pro_4:"Esporta e importa i tuoi dati (CSV · JSON)",
+      price_eyebrow:"Prezzi",price_h2:"Paga una volta. Tuo per sempre.",
+      price_lede:"Un solo acquisto sblocca Pro per sempre — nessun abbonamento, nessun rinnovo.",
+      plan_free:"Gratis",desc_free:"Il timer completo, per sempre. Nessun account.",
+      plan_month:"Mensile",desc_month:"Tutto Pro, addebito mensile.",plan_year:"Annuale",desc_year:"Tutto Pro, qualche mese in regalo.",
+      plan_life:"A vita",desc_life:"Compra una volta. Un Pro che non si rinnova mai.",
+      price_note:"Venduto tramite Lemon Squeezy, il nostro merchant of record — tasse e ricevute gestite.",
+      install_eyebrow:"Installa",install_h2:"Una riga con Homebrew.",
+      install_lede:"Cloister arriva come DMG firmato e autenticato e come cask Homebrew, e si mantiene aggiornato da solo — senza App Store, senza riscaricare.",
+      install_comment:"# aggiungi il tap, fidati, installa",
+      install_fine:"Homebrew 6.0+ ti chiede di fidarti di un tap di terze parti prima di installarne i cask — è la riga di mezzo. Dopo il lancio questo riquadro diventa attivo; oggi è un'anteprima.",
+      faq_eyebrow:"Domande",faq_h2:"Buono a sapersi.",
+      faq_q1:"Dove stanno i miei dati?",faq_a1:"Sul tuo Mac. Cloister salva le sessioni in locale — nessun server e nessun account da creare solo per usarlo.",
+      faq_q2:"Come funzionano gli aggiornamenti?",faq_a2:"L'app si aggiorna da sola in background su un canale firmato, così hai sempre l'ultima versione — senza reinstallare.",
+      faq_q3:"Quale macOS mi serve?",faq_a3:"macOS 15 (Sequoia) o più recente, su Apple Silicon o Intel.",
+      faq_q4:"C'è una prova gratuita?",faq_a4:"Il piano gratis è la prova — un Pomodoro completo senza limiti di tempo. Passa a Pro quando la vista lunga ne vale la pena.",
+      faq_q5:"Abbonamento o a vita?",faq_a5:"Entrambi sbloccano lo stesso Pro. Abbonati a un prezzo d'ingresso più basso, o compra la licenza a vita una volta e non rinnovarla mai.",
+      faq_q6:"Rimborsi?",faq_a6:"Gestiti da Lemon Squeezy, il nostro merchant of record, entro un termine chiaro mostrato al pagamento.",
+      footer_tag:"Un timer Pomodoro autodistribuito per macOS.",
+      footer_pricing:"Prezzi",footer_install:"Installa",footer_faq:"Domande",footer_privacy:"Privacy",footer_support:"Supporto"
+    }
+  };
+  T.en = {}; // English is the source in the markup
+  // Founder note — translations merged in (source English lives in the markup)
+  var FOUNDER = {
+    ko:{ founder_eyebrow:"왜 Cloister인가", founder_h2:"만든 이유는 단순해요.",
+      founder_p1:"타이머 앱은 보통 둘 중 하나예요. 너무 단순해서 시간만 재거나, 반대로 태그·시간 추적·할 일 관리까지 붙으면서 정작 '집중'이라는 목적을 잃어버리죠.",
+      founder_p2:"저는 그 사이가 필요했어요. 집중한 시간을 단순하게 기록하고, 그게 장부처럼 쌓이면 나중에 의미 있게 돌아볼 수 있는 것. <em>cloister</em>는 안뜰을 두른 조용한 회랑이에요 — 저는 그 고요함을 Mac 메뉴바에 두고 싶었습니다. 계정도 클라우드도 없이, 데이터는 제 Mac에만 남게.",
+      founder_p3:"휴식도 하나의 사이클에 넣었어요. 충분히 쉬어야 다음 집중을 건강하게 이어갈 수 있으니까요. 화려한 기능보다, 오래 쓸 수 있는 단순함을 택했습니다." },
+    ja:{ founder_eyebrow:"なぜ Cloister なのか", founder_h2:"作った理由は、単純です。",
+      founder_p1:"タイマーアプリはたいてい二種類です。あまりに簡素で時間を数えるだけか、逆にタグや時間管理、ToDo まで盛り込むうちに、肝心の「集中」という目的を見失ってしまう。",
+      founder_p2:"私はその中間が欲しかったのです。集中した時間をただ記録し、それが台帳のように積み重なって、いつか意味を持って振り返れるように。<em>回廊</em>は中庭を囲む静かな歩廊です — 私はその静けさを Mac のメニューバーに置きたかった。アカウントもクラウドもなく、データは自分の Mac だけに残ります。",
+      founder_p3:"休憩を一つのサイクルに含めたのも意図的です。しっかり休んでこそ、次の集中を健やかに続けられるから。派手な機能よりも、長く使える簡潔さを選びました。" },
+    "zh-Hans":{ founder_eyebrow:"为什么是 Cloister", founder_h2:"做它的理由很简单。",
+      founder_p1:"计时器应用大多走向两个极端。要么简单到只会计时，要么堆上标签、时间追踪、待办清单，直到把‘专注’这个初衷弄丢了。",
+      founder_p2:"我想要的是两者之间：只是记录我专注的时间，让它像账簿一样累积，日后值得回看。<em>回廊</em>是环绕中庭的静谧走廊——我想把那份平静放进 Mac 的菜单栏。没有账户，没有云端；数据只留在我的 Mac 上。",
+      founder_p3:"把休息纳入一个循环也是有意为之。休息够了，下一次专注才能健康地延续。比起花哨的功能，我选择了能长久使用的简单。" },
+    "zh-Hant":{ founder_eyebrow:"為什麼是 Cloister", founder_h2:"做它的理由很簡單。",
+      founder_p1:"計時器應用大多走向兩個極端。要麼簡單到只會計時，要麼堆上標籤、時間追蹤、待辦清單，直到把『專注』這個初衷弄丟了。",
+      founder_p2:"我想要的是兩者之間：只是記錄我專注的時間，讓它像帳簿一樣累積，日後值得回顧。<em>迴廊</em>是環繞中庭的靜謐走廊——我想把那份寧靜放進 Mac 的選單列。沒有帳戶，沒有雲端；資料只留在我的 Mac 上。",
+      founder_p3:"把休息納入一個循環也是刻意為之。休息夠了，下一次專注才能健康地延續。比起花俏的功能，我選擇了能長久使用的簡單。" },
+    es:{ founder_eyebrow:"Por qué Cloister", founder_h2:"La razón es simple.",
+      founder_p1:"La mayoría de los temporizadores van por uno de dos caminos. Unos son tan escuetos que solo cuentan los minutos; otros acumulan etiquetas, seguimiento de tiempo y listas de tareas hasta perder lo esencial: el foco.",
+      founder_p2:"Quería el espacio intermedio: registrar sin más el tiempo que me concentro y dejar que se acumule como un libro de cuentas al que merece la pena volver. Un <em>claustro</em> es el pórtico tranquilo que rodea un patio — quería esa calma en la barra de menús de mi Mac. Sin cuenta, sin nube; los datos se quedan en mi Mac.",
+      founder_p3:"El descanso es parte del ciclo, a propósito: hay que recuperarse bien para seguir concentrándose bien. Por eso elegí una simplicidad duradera en vez de un montón de funciones — algo que puedas seguir usando mucho tiempo." },
+    fr:{ founder_eyebrow:"Pourquoi Cloister", founder_h2:"La raison est simple.",
+      founder_p1:"La plupart des minuteurs prennent l'une de deux directions. Certains sont si dépouillés qu'ils ne font que compter les minutes ; d'autres empilent étiquettes, suivi du temps et listes de tâches jusqu'à perdre l'essentiel : la concentration.",
+      founder_p2:"Je voulais l'entre-deux : simplement noter le temps où je me concentre, et le laisser s'accumuler comme un registre qu'on aime relire. Un <em>cloître</em>, c'est la galerie paisible qui entoure une cour — je voulais ce calme dans la barre des menus de mon Mac. Pas de compte, pas de cloud ; les données restent sur mon Mac.",
+      founder_p3:"Le repos fait partie du cycle, à dessein : il faut bien récupérer pour continuer à bien se concentrer. J'ai donc choisi une simplicité durable plutôt qu'un empilement de fonctions — quelque chose que l'on garde longtemps." },
+    de:{ founder_eyebrow:"Warum Cloister", founder_h2:"Der Grund ist einfach.",
+      founder_p1:"Die meisten Timer-Apps gehen einen von zwei Wegen. Manche sind so kahl, dass sie nur die Minuten zählen; andere häufen Tags, Zeiterfassung und To-do-Listen an, bis der eigentliche Sinn — der Fokus — verloren geht.",
+      founder_p2:"Ich wollte den Raum dazwischen: einfach die Zeit festhalten, in der ich fokussiert bin, und sie sich wie ein Kontobuch ansammeln lassen, in das man gern zurückblickt. Ein <em>Kreuzgang</em> ist der stille Wandelgang um einen Innenhof — diese Ruhe wollte ich in der Menüleiste meines Macs. Kein Konto, keine Cloud; die Daten bleiben auf meinem Mac.",
+      founder_p3:"Die Pause gehört bewusst zum Zyklus: Man muss sich gut erholen, um weiter gut fokussieren zu können. Deshalb habe ich eine dauerhafte Schlichtheit einem Funktionsberg vorgezogen — etwas, das man lange nutzen kann." },
+    "pt-BR":{ founder_eyebrow:"Por que o Cloister", founder_h2:"O motivo é simples.",
+      founder_p1:"A maioria dos timers segue um de dois caminhos. Alguns são tão simples que só contam os minutos; outros acumulam etiquetas, controle de tempo e listas de tarefas até perder o essencial: o foco.",
+      founder_p2:"Eu queria o meio-termo: só registrar o tempo em que me concentro e deixar que se acumule como um livro-razão que vale a pena revisitar. Um <em>claustro</em> é a galeria tranquila ao redor de um pátio — eu queria essa calma na barra de menus do meu Mac. Sem conta, sem nuvem; os dados ficam no meu Mac.",
+      founder_p3:"O descanso faz parte do ciclo, de propósito: é preciso se recuperar bem para continuar focando bem. Por isso escolhi uma simplicidade duradoura em vez de um monte de recursos — algo que dá para usar por muito tempo." },
+    it:{ founder_eyebrow:"Perché Cloister", founder_h2:"Il motivo è semplice.",
+      founder_p1:"La maggior parte dei timer prende una di due strade. Alcuni sono così essenziali da contare solo i minuti; altri accumulano tag, monitoraggio del tempo e liste di cose da fare finché non si perde il punto: la concentrazione.",
+      founder_p2:"Volevo la via di mezzo: registrare semplicemente il tempo in cui mi concentro e lasciarlo accumulare come un registro su cui vale la pena tornare. Un <em>chiostro</em> è il porticato silenzioso attorno a un cortile — volevo quella calma nella barra dei menu del mio Mac. Nessun account, nessun cloud; i dati restano sul mio Mac.",
+      founder_p3:"Il riposo fa parte del ciclo, di proposito: bisogna recuperare bene per continuare a concentrarsi bene. Così ho scelto una semplicità duratura invece di un mucchio di funzioni — qualcosa da usare a lungo." }
+  };
+  for(var _lc in FOUNDER){ if(T[_lc]){ for(var _fk in FOUNDER[_lc]){ T[_lc][_fk] = FOUNDER[_lc][_fk]; } } }
+  // Comparison — Korean drafted; other locales fall back to the English source until reviewed.
+  var CMP = { ko:{ cmp_eyebrow:"비교하자면", cmp_h2:"너무 적지도, 너무 많지도 않게.",
+    cmp_other_t:"대부분의 타이머",
+    cmp_other_1:"단순한 스톱워치거나, 태그·할 일까지 쌓인 트래커거나.",
+    cmp_other_2:"기록은 계정 뒤, 그들의 서버에.",
+    cmp_other_3:"공짜지만 얕거나, 매달 내는 요금.",
+    cmp_cloister_t:"Cloister",
+    cmp_cloister_1:"그저 집중을 기록하고 — 그게 되돌아볼 만한 것으로 쌓입니다.",
+    cmp_cloister_2:"당신의 Mac에. 계정도, 클라우드도 없이.",
+    cmp_cloister_3:"$19.99 한 번 — 업데이트 포함.",
+    install_dl:"DMG 다운로드",
+    install_dl_note:"공증됨 · Apple Silicon & Intel · macOS 15+. Homebrew 없이도 설치." },
+    ja:{ cmp_eyebrow:"比べてみると", cmp_h2:"少なすぎず、多すぎず。", cmp_other_t:"たいていのタイマー", cmp_other_1:"ただのストップウォッチか、タグやToDoを盛り込んだトラッカーか。", cmp_other_2:"履歴はアカウントの奥、相手のサーバーに。", cmp_other_3:"無料でも浅いか、毎月の料金か。", cmp_cloister_t:"Cloister", cmp_cloister_1:"ただ集中を記録し — それが振り返る価値のあるものへ積み上がる。", cmp_cloister_2:"あなたのMacに。アカウントもクラウドもなし。", cmp_cloister_3:"$19.99 一度きり — アップデート込み。", install_dl:"DMG をダウンロード", install_dl_note:"公証済み · Apple Silicon & Intel · macOS 15+。Homebrew は不要。", faq_a6:"はい — 購入後14日以内なら、理由を問わず返金します。メールでご連絡いただければ対応します。", hero_lede:"Cloister は Mac のメニューバーに住む、静かなフォーカスタイマー。セッションを始め、金色のリングが閉じるあいだに、集中した時間が一日また一日と積み上がるのを見守ります。", faq_a4:"無料ティアが体験そのもの — 時間制限のない完全なフォーカスタイマー。長い視点が欲しくなったら Pro へ。", footer_tag:"自己配布の macOS フォーカスタイマー。" },
+    "zh-Hans":{ cmp_eyebrow:"对比一下", cmp_h2:"不过简，也不过繁。", cmp_other_t:"大多数计时器", cmp_other_1:"要么只是秒表，要么堆满标签和待办的追踪器。", cmp_other_2:"记录在账户背后，存于他们的服务器。", cmp_other_3:"免费却浅薄，或按月付费。", cmp_cloister_t:"Cloister", cmp_cloister_1:"只记录你的专注 — 它会累积成值得回看的东西。", cmp_cloister_2:"在你的 Mac 上。没有账户，没有云端。", cmp_cloister_3:"$19.99 一次 — 含更新。", install_dl:"下载 .dmg", install_dl_note:"已公证 · Apple Silicon 与 Intel · macOS 15+。无需 Homebrew。", faq_a6:"可以 — 购买后 14 天内，无需理由即可退款。发邮件告诉我们即可处理。", hero_lede:"Cloister 是一款住在 Mac 菜单栏里的沉静专注计时器。开始一段专注，看金色的环慢慢合拢，日复一日地看着专注的时间不断累积。", faq_a4:"免费层就是试用 — 一款没有时间限制的完整专注计时器。当长远视野值得时，再升级到 Pro。", footer_tag:"一款自行分发的 macOS 专注计时器。" },
+    "zh-Hant":{ cmp_eyebrow:"對比一下", cmp_h2:"不過簡，也不過繁。", cmp_other_t:"大多數計時器", cmp_other_1:"要麼只是碼錶，要麼堆滿標籤和待辦的追蹤器。", cmp_other_2:"記錄在帳戶背後，存於他們的伺服器。", cmp_other_3:"免費卻淺薄，或按月付費。", cmp_cloister_t:"Cloister", cmp_cloister_1:"只記錄你的專注 — 它會累積成值得回顧的東西。", cmp_cloister_2:"在你的 Mac 上。沒有帳戶，沒有雲端。", cmp_cloister_3:"$19.99 一次 — 含更新。", install_dl:"下載 .dmg", install_dl_note:"已公證 · Apple Silicon 與 Intel · macOS 15+。無需 Homebrew。", faq_a6:"可以 — 購買後 14 天內，無需理由即可退款。寄信告訴我們即可處理。", hero_lede:"Cloister 是一款住在 Mac 選單列裡的沉靜專注計時器。開始一段專注，看金色的環慢慢闔上，日復一日地看著專注的時間不斷累積。", faq_a4:"免費層就是試用 — 一款沒有時間限制的完整專注計時器。當長遠視野值得時，再升級到 Pro。", footer_tag:"一款自行分發的 macOS 專注計時器。" },
+    es:{ cmp_eyebrow:"Cómo se compara", cmp_h2:"Ni de menos, ni de más.", cmp_other_t:"La mayoría de temporizadores", cmp_other_1:"Un simple cronómetro — o un rastreador cargado de etiquetas y tareas.", cmp_other_2:"Tu historial en su servidor, tras una cuenta.", cmp_other_3:"Gratis pero superficial, o una cuota cada mes.", cmp_cloister_t:"Cloister", cmp_cloister_1:"Solo tu concentración, registrada — y se acumula en algo que vale la pena revisar.", cmp_cloister_2:"En tu Mac. Sin cuenta, sin nube.", cmp_cloister_3:"$19.99 una vez — actualizaciones incluidas.", install_dl:"Descargar el .dmg", install_dl_note:"Notarizado · Apple Silicon e Intel · macOS 15+. Sin Homebrew.", faq_a6:"Sí — dentro de los 14 días de la compra, sin preguntas. Escríbenos y lo gestionamos.", hero_lede:"Cloister es un temporizador de concentración sereno que vive en la barra de menús de tu Mac. Inicia una sesión, deja que el anillo dorado se cierre y mira cómo tus horas de foco se acumulan, un día tranquilo tras otro.", faq_a4:"El plan gratis es la prueba: un temporizador de concentración completo sin límite de tiempo. Pasa a Pro cuando la vista larga valga la pena.", footer_tag:"Un temporizador de concentración de distribución propia para macOS." },
+    fr:{ cmp_eyebrow:"Ce qui le distingue", cmp_h2:"Ni trop peu, ni trop.", cmp_other_t:"La plupart des minuteurs", cmp_other_1:"Un simple chronomètre — ou un traqueur bardé d'étiquettes et de tâches.", cmp_other_2:"Votre historique sur leur serveur, derrière un compte.", cmp_other_3:"Gratuit mais superficiel, ou un abonnement mensuel.", cmp_cloister_t:"Cloister", cmp_cloister_1:"Juste votre concentration, notée — et elle s'accumule en quelque chose à revoir.", cmp_cloister_2:"Sur votre Mac. Pas de compte, pas de cloud.", cmp_cloister_3:"$19.99 une fois — mises à jour incluses.", install_dl:"Télécharger le .dmg", install_dl_note:"Notarisé · Apple Silicon et Intel · macOS 15+. Sans Homebrew.", faq_a6:"Oui — sous 14 jours après l'achat, sans condition. Écrivez-nous et c'est réglé.", hero_lede:"Cloister est un minuteur de concentration serein qui vit dans la barre des menus de votre Mac. Lancez une session, laissez l'anneau doré se refermer, et regardez vos heures de concentration s'empiler, un jour paisible après l'autre.", faq_a4:"L'offre gratuite est l'essai — un minuteur de concentration complet sans limite de temps. Passez à Pro quand la vue longue en vaut la peine.", footer_tag:"Un minuteur de concentration auto-distribué pour macOS." },
+    de:{ cmp_eyebrow:"Im Vergleich", cmp_h2:"Nicht zu wenig, nicht zu viel.", cmp_other_t:"Die meisten Timer", cmp_other_1:"Eine bloße Stoppuhr — oder ein Tracker voller Tags und To-dos.", cmp_other_2:"Dein Verlauf auf ihrem Server, hinter einem Konto.", cmp_other_3:"Kostenlos, aber flach — oder eine monatliche Gebühr.", cmp_cloister_t:"Cloister", cmp_cloister_1:"Nur dein Fokus, festgehalten — und er sammelt sich zu etwas, das den Rückblick lohnt.", cmp_cloister_2:"Auf deinem Mac. Kein Konto, keine Cloud.", cmp_cloister_3:"$19.99 einmalig — Updates inklusive.", install_dl:"Die .dmg laden", install_dl_note:"Notarisiert · Apple Silicon & Intel · macOS 15+. Kein Homebrew nötig.", faq_a6:"Ja — innerhalb von 14 Tagen nach dem Kauf, ohne Nachfragen. Schreib uns, und es ist erledigt.", hero_lede:"Cloister ist ein ruhiger Fokus-Timer, der in der Menüleiste deines Mac wohnt. Starte eine Sitzung, lass den goldenen Ring sich schließen und sieh zu, wie sich deine fokussierten Stunden stapeln — ein stiller Tag nach dem anderen.", faq_a4:"Die Gratis-Stufe ist die Testphase — ein vollständiger Fokus-Timer ohne Zeitlimit. Wechsle zu Pro, wenn der lange Blick es wert ist.", footer_tag:"Ein selbst vertriebener Fokus-Timer für macOS." },
+    "pt-BR":{ cmp_eyebrow:"Como se compara", cmp_h2:"Nem de menos, nem demais.", cmp_other_t:"A maioria dos timers", cmp_other_1:"Um simples cronômetro — ou um rastreador cheio de etiquetas e tarefas.", cmp_other_2:"Seu histórico no servidor deles, atrás de uma conta.", cmp_other_3:"Grátis mas raso, ou uma taxa todo mês.", cmp_cloister_t:"Cloister", cmp_cloister_1:"Só o seu foco, registrado — e ele se acumula em algo que vale revisitar.", cmp_cloister_2:"No seu Mac. Sem conta, sem nuvem.", cmp_cloister_3:"$19.99 uma vez — atualizações incluídas.", install_dl:"Baixar o .dmg", install_dl_note:"Notarizado · Apple Silicon e Intel · macOS 15+. Sem Homebrew.", faq_a6:"Sim — em até 14 dias após a compra, sem perguntas. Envie um e-mail e resolvemos.", hero_lede:"O Cloister é um timer de foco sereno que vive na barra de menus do seu Mac. Comece uma sessão, deixe o anel dourado se fechar e veja suas horas de foco se empilharem, um dia tranquilo após o outro.", faq_a4:"O plano grátis é o teste — um timer de foco completo sem limite de tempo. Vá para o Pro quando a visão longa valer a pena.", footer_tag:"Um timer de foco de distribuição própria para macOS." },
+    it:{ cmp_eyebrow:"A confronto", cmp_h2:"Né troppo poco, né troppo.", cmp_other_t:"La maggior parte dei timer", cmp_other_1:"Un semplice cronometro — o un tracker pieno di tag e cose da fare.", cmp_other_2:"La tua cronologia sul loro server, dietro un account.", cmp_other_3:"Gratis ma superficiale, o un canone ogni mese.", cmp_cloister_t:"Cloister", cmp_cloister_1:"Solo la tua concentrazione, registrata — e si accumula in qualcosa su cui vale la pena tornare.", cmp_cloister_2:"Sul tuo Mac. Nessun account, nessun cloud.", cmp_cloister_3:"$19.99 una volta — aggiornamenti inclusi.", install_dl:"Scarica il .dmg", install_dl_note:"Autenticato · Apple Silicon e Intel · macOS 15+. Senza Homebrew.", faq_a6:"Sì — entro 14 giorni dall'acquisto, senza domande. Scrivici e ci pensiamo noi.", hero_lede:"Cloister è un timer di concentrazione sereno che vive nella barra dei menu del tuo Mac. Avvia una sessione, lascia che l'anello dorato si chiuda e guarda le tue ore di concentrazione accumularsi, un giorno tranquillo dopo l'altro.", faq_a4:"Il piano gratis è la prova — un timer di concentrazione completo senza limiti di tempo. Passa a Pro quando la vista lunga ne vale la pena.", footer_tag:"Un timer di concentrazione autodistribuito per macOS." } };
+  for(var _cl in CMP){ if(T[_cl]){ for(var _ck in CMP[_cl]){ T[_cl][_ck] = CMP[_cl][_ck]; } } }
+  var docTitle = { en:"Cloister — A quiet cloister for focused work", ko:"Cloister — 고요한 회랑에서 집중하는 시간",
+    ja:"Cloister — 静かな回廊で集中する時間", "zh-Hans":"Cloister — 在静谧的回廊里专注地工作",
+    "zh-Hant":"Cloister — 在靜謐的迴廊裡專注地工作", es:"Cloister — Un claustro tranquilo para trabajar concentrado",
+    fr:"Cloister — Un cloître paisible pour travailler concentré", de:"Cloister — Ein stiller Kreuzgang für konzentriertes Arbeiten",
+    "pt-BR":"Cloister — Um claustro tranquilo para trabalhar concentrado", it:"Cloister — Un chiostro tranquillo per lavorare concentrati" };
+
+  var nodes = [].slice.call(document.querySelectorAll('[data-i18n],[data-i18n-html]'));
+  nodes.forEach(function(el){
+    if(el.hasAttribute('data-i18n')) el.setAttribute('data-en', el.textContent);
+    else el.setAttribute('data-en-html', el.innerHTML);
+  });
+
+  // Short, iconic product terms stay in English across all locales (polish).
+  var KEEP_EN = {ring_label:1, ritual_h2:1, step1_t:1, step2_t:1, step3_t:1};
+  function apply(lang){
+    var dict = T[lang] || {};
+    nodes.forEach(function(el){
+      if(el.hasAttribute('data-i18n')){
+        var k = el.getAttribute('data-i18n');
+        el.textContent = (!KEEP_EN[k] && dict[k] != null) ? dict[k] : el.getAttribute('data-en');
+      } else {
+        var kh = el.getAttribute('data-i18n-html');
+        el.innerHTML = dict[kh] != null ? dict[kh] : el.getAttribute('data-en-html');
+      }
+    });
+    document.documentElement.lang = lang;
+    document.title = docTitle[lang] || docTitle.en;
+    var sel = document.getElementById('lang'); if(sel) sel.value = lang;
+    try{ localStorage.setItem('cloister_lang', lang); }catch(e){}
+  }
+
+  function detect(){
+    try{ var saved = localStorage.getItem('cloister_lang'); if(saved && (saved==='en'||T[saved])) return saved; }catch(e){}
+    var supported = ['en','ko','ja','zh-Hans','zh-Hant','es','fr','de','pt-BR','it'];
+    var langs = navigator.languages || [navigator.language || 'en'];
+    for(var i=0;i<langs.length;i++){
+      var l = (langs[i]||'').toLowerCase();
+      if(l.indexOf('zh')===0){ return (l.indexOf('tw')>-1||l.indexOf('hk')>-1||l.indexOf('hant')>-1)?'zh-Hant':'zh-Hans'; }
+      if(l.indexOf('pt')===0) return 'pt-BR';
+      var base = l.split('-')[0];
+      for(var j=0;j<supported.length;j++){ if(supported[j].toLowerCase()===l || supported[j].toLowerCase()===base) return supported[j]; }
+    }
+    return 'en';
+  }
+
+  var sel = document.getElementById('lang');
+  if(sel) sel.addEventListener('change', function(){ apply(this.value); });
+  apply(detect());
+
+  // ---- decorative: heatmap ----
+  var heat = document.getElementById('heat');
+  if(heat){
+    var shades = ['#D2C7AC','#BFCBA0','#9DBE86','#6FA46A','#3E7A4E'];
+    for(var i=0;i<20*7;i++){
+      var s = document.createElement('i');
+      var r = Math.random();
+      var idx = r<0.42?0 : r<0.62?1 : r<0.8?2 : r<0.93?3 : 4;
+      s.style.background = shades[idx];
+      heat.appendChild(s);
+    }
+  }
+
+  // ---- hero ring ----
+  var cv = document.getElementById('ring');
+  if(cv && cv.getContext){
+    var ctx = cv.getContext('2d');
+    var S = 680, R = S/2, cx = R, cy = R, outer = 250, lw = 14;
+    function pal(){
+      return document.documentElement.getAttribute('data-theme')==='light'
+        ? { c0:'#3E7A4E', c1:'#1C3B29', track:'rgba(38,70,52,.32)', a0:'#D2A247', a1:'#9C7522', dot:'#A9822F' }
+        : { c0:'#3E7A4E', c1:'#173727', track:'rgba(203,162,78,.16)', a0:'#F4E4B8', a1:'#CBA24E', dot:'#F4E4B8' };
+    }
+    var lastP = 0;
+    function draw(p){
+      lastP = p;
+      var q = pal();
+      ctx.clearRect(0,0,S,S);
+      var g = ctx.createRadialGradient(cx,cy,20,cx,cy,outer-lw);
+      g.addColorStop(0,q.c0); g.addColorStop(1,q.c1);
+      ctx.beginPath(); ctx.arc(cx,cy,outer-lw-2,0,Math.PI*2); ctx.fillStyle=g; ctx.fill();
+      ctx.beginPath(); ctx.arc(cx,cy,outer,0,Math.PI*2);
+      ctx.strokeStyle=q.track; ctx.lineWidth=lw; ctx.stroke();
+      var start=-Math.PI/2, end=start+Math.PI*2*p;
+      var gr = ctx.createLinearGradient(0,0,S,S); gr.addColorStop(0,q.a0); gr.addColorStop(1,q.a1);
+      ctx.beginPath(); ctx.arc(cx,cy,outer,start,end); ctx.strokeStyle=gr; ctx.lineWidth=lw; ctx.lineCap='round'; ctx.stroke();
+      var dx=cx+outer*Math.cos(end), dy=cy+outer*Math.sin(end);
+      ctx.beginPath(); ctx.arc(dx,dy,lw*0.72,0,Math.PI*2); ctx.fillStyle=q.dot; ctx.fill();
+    }
+    window.addEventListener('cloister-theme', function(){ draw(lastP); });
+    var clock=document.getElementById('clock');
+    function setClock(p){ var total=25*60, left=Math.round(total*(1-p)); var m=Math.floor(left/60), s=left%60; if(clock) clock.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s; }
+    if(reduce){ draw(0.28); setClock(0.28); }
+    else{
+      draw(0); setClock(0);
+      var t0=null, dur=25*60*1000; // real-time: one full 25-minute focus, 1s per second
+      function loop(ts){ if(!t0)t0=ts; var e=((ts-t0)%dur)/dur; draw(e); setClock(e); requestAnimationFrame(loop); }
+      requestAnimationFrame(loop);
+    }
+  }
+
+  // ---- scroll reveal ----
+  if(!reduce && 'IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target);} });},{threshold:.14});
+    document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+  } else { document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');}); }
+})();
+</script>
+</body>
+</html>
