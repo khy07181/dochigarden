@@ -503,7 +503,9 @@ brew install --cask <span class="g">cloister</span></pre>
       <a href="#install" data-i18n="footer_install">Install</a>
       <a href="#pricing" data-i18n="footer_pricing">Pricing</a>
       <a href="#faq" data-i18n="footer_faq">FAQ</a>
-      <a href="#" data-i18n="footer_privacy">Privacy</a>
+      <a href="/cloister/privacy/" data-i18n="footer_privacy">Privacy</a>
+      <a href="/cloister/terms/" data-i18n="footer_terms">Terms</a>
+      <a href="/cloister/refund/" data-i18n="footer_refund">Refund</a>
       <a href="mailto:support@dochigarden.com" data-i18n="footer_support">Support</a>
     </nav>
   </div>
@@ -1026,6 +1028,13 @@ brew install --cask <span class="g">cloister</span></pre>
     "pt-BR":{ cmp_eyebrow:"Como se compara", cmp_h2:"Nem de menos, nem demais.", cmp_other_t:"A maioria dos timers", cmp_other_1:"Um simples cronômetro — ou um rastreador cheio de etiquetas e tarefas.", cmp_other_2:"Seu histórico no servidor deles, atrás de uma conta.", cmp_other_3:"Grátis mas raso, ou uma taxa todo mês.", cmp_cloister_t:"Cloister", cmp_cloister_1:"Só o seu foco, registrado — e ele se acumula em algo que vale revisitar.", cmp_cloister_2:"No seu Mac. Sem conta, sem nuvem.", cmp_cloister_3:"$19.99 uma vez — atualizações incluídas.", install_dl:"Baixar o .dmg", install_dl_note:"Notarizado · Apple Silicon e Intel · macOS 15+. Sem Homebrew.", faq_a6:"Sim — em até 14 dias após a compra, sem perguntas. Envie um e-mail e resolvemos.", hero_lede:"O Cloister é um timer de foco sereno que vive na barra de menus do seu Mac. Comece uma sessão, deixe o anel dourado se fechar e veja suas horas de foco se empilharem, um dia tranquilo após o outro.", faq_a4:"O plano grátis é o teste — um timer de foco completo sem limite de tempo. Vá para o Pro quando a visão longa valer a pena.", footer_tag:"Um timer de foco de distribuição própria para macOS." },
     it:{ cmp_eyebrow:"A confronto", cmp_h2:"Né troppo poco, né troppo.", cmp_other_t:"La maggior parte dei timer", cmp_other_1:"Un semplice cronometro — o un tracker pieno di tag e cose da fare.", cmp_other_2:"La tua cronologia sul loro server, dietro un account.", cmp_other_3:"Gratis ma superficiale, o un canone ogni mese.", cmp_cloister_t:"Cloister", cmp_cloister_1:"Solo la tua concentrazione, registrata — e si accumula in qualcosa su cui vale la pena tornare.", cmp_cloister_2:"Sul tuo Mac. Nessun account, nessun cloud.", cmp_cloister_3:"$19.99 una volta — aggiornamenti inclusi.", install_dl:"Scarica il .dmg", install_dl_note:"Autenticato · Apple Silicon e Intel · macOS 15+. Senza Homebrew.", faq_a6:"Sì — entro 14 giorni dall'acquisto, senza domande. Scrivici e ci pensiamo noi.", hero_lede:"Cloister è un timer di concentrazione sereno che vive nella barra dei menu del tuo Mac. Avvia una sessione, lascia che l'anello dorato si chiuda e guarda le tue ore di concentrazione accumularsi, un giorno tranquillo dopo l'altro.", faq_a4:"Il piano gratis è la prova — un timer di concentrazione completo senza limiti di tempo. Passa a Pro quando la vista lunga ne vale la pena.", footer_tag:"Un timer di concentrazione autodistribuito per macOS." } };
   for(var _cl in CMP){ if(T[_cl]){ for(var _ck in CMP[_cl]){ T[_cl][_ck] = CMP[_cl][_ck]; } } }
+  // Legal footer links (Privacy already per-locale; add Terms + Refund).
+  var LEGAL = { ko:{footer_terms:"약관",footer_refund:"환불"}, ja:{footer_terms:"利用規約",footer_refund:"返金"},
+    "zh-Hans":{footer_terms:"条款",footer_refund:"退款"}, "zh-Hant":{footer_terms:"條款",footer_refund:"退款"},
+    es:{footer_terms:"Términos",footer_refund:"Reembolsos"}, fr:{footer_terms:"Conditions",footer_refund:"Remboursements"},
+    de:{footer_terms:"Bedingungen",footer_refund:"Rückerstattung"}, "pt-BR":{footer_terms:"Termos",footer_refund:"Reembolso"},
+    it:{footer_terms:"Termini",footer_refund:"Rimborsi"} };
+  for(var _ll in LEGAL){ if(T[_ll]){ for(var _lk in LEGAL[_ll]){ T[_ll][_lk] = LEGAL[_ll][_lk]; } } }
   var docTitle = { en:"Cloister — A quiet cloister for focused work", ko:"Cloister — 고요한 회랑에서 집중하는 시간",
     ja:"Cloister — 静かな回廊で集中する時間", "zh-Hans":"Cloister — 在静谧的回廊里专注地工作",
     "zh-Hant":"Cloister — 在靜謐的迴廊裡專注地工作", es:"Cloister — Un claustro tranquilo para trabajar concentrado",
