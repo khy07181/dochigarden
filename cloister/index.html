@@ -267,7 +267,7 @@
       <a href="#stats" data-i18n="nav_history">Focus history</a>
       <a href="#install" data-i18n="nav_install">Install</a>
       <a href="#pricing" data-i18n="nav_pricing">Pricing</a>
-      <a class="pill" href="#pricing" data-i18n="nav_soon">Coming soon</a>
+      <a class="pill" href="#install" data-i18n="nav_get">Download</a>
       <button class="themebtn" id="theme" type="button" aria-label="Toggle light or dark mode"></button>
       <span class="lang-wrap">
         <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.4" fill="none" stroke="currentColor" stroke-width="1.1"/><path d="M1.6 8h12.8M8 1.6c2 2 2 10.8 0 12.8M8 1.6c-2 2-2 10.8 0 12.8" fill="none" stroke="currentColor" stroke-width="1.1"/></svg>
@@ -296,7 +296,7 @@
       <h1 style="margin-top:18px" data-i18n-html="hero_h1">A quiet <em>Cloister</em><br>for focused work.</h1>
       <p class="lede" data-i18n="hero_lede">Cloister is a calm focus timer that lives in your Mac's menu bar. Begin a session, let the gold ring close, and watch your focused hours stack — one quiet day after another.</p>
       <div class="cta-row">
-        <span class="btn btn-primary" role="button" aria-disabled="true" tabindex="0" data-i18n="hero_cta_soon">Coming soon</span>
+        <a class="btn btn-primary" href="#install" data-i18n="hero_cta_get">Download for macOS</a>
         <a class="btn btn-ghost" href="#craft" data-i18n="hero_cta_how">See how it works ↓</a>
       </div>
       <p class="hero-note">
@@ -459,11 +459,10 @@ brew trust khy07181/cloister
 brew install --cask <span class="g">cloister</span></pre>
     </div>
     <div class="dl-row reveal">
-      <!-- TODO(launch): confirm the DMG download URL — point at the direct asset (…/releases/latest/download/<file>.dmg) once a non-prerelease is published. -->
-      <a class="btn btn-primary" href="https://github.com/khy07181/homebrew-cloister/releases" data-i18n="install_dl">Download the .dmg</a>
+      <a class="btn btn-primary" href="https://github.com/khy07181/homebrew-cloister/releases/latest" data-i18n="install_dl">Download the .dmg</a>
       <span class="dl-note" data-i18n="install_dl_note">Notarized · Apple Silicon &amp; Intel · macOS 15+. No Homebrew required.</span>
     </div>
-    <p class="fine" data-i18n="install_fine">Homebrew 6.0+ asks you to trust a third-party tap before installing its casks — that's the middle line. After launch this box goes live; today it's a preview.</p>
+    <p class="fine" data-i18n="install_fine">Homebrew 6.0+ asks you to trust a third-party tap before installing its casks — that's the middle line.</p>
   </div>
 </section>
 
@@ -1035,6 +1034,19 @@ brew install --cask <span class="g">cloister</span></pre>
     de:{footer_terms:"Bedingungen",footer_refund:"Rückerstattung"}, "pt-BR":{footer_terms:"Termos",footer_refund:"Reembolso"},
     it:{footer_terms:"Termini",footer_refund:"Rimborsi"} };
   for(var _ll in LEGAL){ if(T[_ll]){ for(var _lk in LEGAL[_ll]){ T[_ll][_lk] = LEGAL[_ll][_lk]; } } }
+  // Go-live (2026-08): "Coming soon" CTAs → Download; drop the "preview" line.
+  var GOLIVE = {
+    ko:{ nav_get:"다운로드", hero_cta_get:"macOS용 다운로드", install_fine:"Homebrew 6.0+는 서드파티 tap의 캐스크를 설치하기 전에 신뢰를 요청합니다 — 가운데 줄이 그것입니다." },
+    ja:{ nav_get:"ダウンロード", hero_cta_get:"macOS 版をダウンロード", install_fine:"Homebrew 6.0+ はサードパーティ tap のカスクを入れる前に信頼を求めます — それが真ん中の行です。" },
+    "zh-Hans":{ nav_get:"下载", hero_cta_get:"下载 macOS 版", install_fine:"Homebrew 6.0+ 会在安装第三方 tap 的 cask 前要求信任 — 就是中间那行。" },
+    "zh-Hant":{ nav_get:"下載", hero_cta_get:"下載 macOS 版", install_fine:"Homebrew 6.0+ 會在安裝第三方 tap 的 cask 前要求信任 — 就是中間那行。" },
+    es:{ nav_get:"Descargar", hero_cta_get:"Descargar para macOS", install_fine:"Homebrew 6.0+ te pide confiar en un tap de terceros antes de instalar sus casks: esa es la línea del medio." },
+    fr:{ nav_get:"Télécharger", hero_cta_get:"Télécharger pour macOS", install_fine:"Homebrew 6.0+ vous demande de faire confiance à un tap tiers avant d'installer ses casks — c'est la ligne du milieu." },
+    de:{ nav_get:"Herunterladen", hero_cta_get:"Für macOS herunterladen", install_fine:"Homebrew 6.0+ bittet dich, einem Drittanbieter-Tap zu vertrauen, bevor du seine Casks installierst — das ist die mittlere Zeile." },
+    "pt-BR":{ nav_get:"Baixar", hero_cta_get:"Baixar para macOS", install_fine:"O Homebrew 6.0+ pede que você confie em um tap de terceiros antes de instalar seus casks — é a linha do meio." },
+    it:{ nav_get:"Scarica", hero_cta_get:"Scarica per macOS", install_fine:"Homebrew 6.0+ ti chiede di fidarti di un tap di terze parti prima di installarne i cask — è la riga di mezzo." }
+  };
+  for(var _gk in GOLIVE){ if(T[_gk]){ for(var _gg in GOLIVE[_gk]){ T[_gk][_gg] = GOLIVE[_gk][_gg]; } } }
   var docTitle = { en:"Cloister — A quiet cloister for focused work", ko:"Cloister — 고요한 회랑에서 집중하는 시간",
     ja:"Cloister — 静かな回廊で集中する時間", "zh-Hans":"Cloister — 在静谧的回廊里专注地工作",
     "zh-Hant":"Cloister — 在靜謐的迴廊裡專注地工作", es:"Cloister — Un claustro tranquilo para trabajar concentrado",
