@@ -448,19 +448,19 @@
   <div class="wrap">
     <div class="section-head reveal">
       <span class="eyebrow" data-i18n="install_eyebrow">Install</span>
-      <h2 data-i18n="install_h2">One line with Homebrew.</h2>
+      <h2 data-i18n="install_h2">Download and go.</h2>
       <p class="lede" data-i18n="install_lede">Cloister ships as a signed, notarized DMG and a Homebrew cask, and keeps itself up to date — no App Store, no re-downloading.</p>
-    </div>
-    <div class="term reveal">
-      <div class="bar"><span class="tl-dot"></span><span class="tl-dot"></span><span class="tl-dot"></span></div>
-      <pre><span class="c" data-i18n="install_comment"># add the tap, trust it, install</span>
-brew tap khy07181/cloister
-brew trust khy07181/cloister
-brew install --cask <span class="g">cloister</span></pre>
     </div>
     <div class="dl-row reveal">
       <a class="btn btn-primary" href="https://github.com/khy07181/homebrew-cloister/releases/latest" data-i18n="install_dl">Download the .dmg</a>
       <span class="dl-note" data-i18n="install_dl_note">Notarized · Apple Silicon &amp; Intel · macOS 15+. No Homebrew required.</span>
+    </div>
+    <div class="term reveal">
+      <div class="bar"><span class="tl-dot"></span><span class="tl-dot"></span><span class="tl-dot"></span></div>
+      <pre><span class="c" data-i18n="install_comment"># or with Homebrew — one command:</span>
+brew tap khy07181/cloister && \
+brew trust khy07181/cloister && \
+brew install --cask <span class="g">cloister</span></pre>
     </div>
     <p class="fine" data-i18n="install_fine">Homebrew 6.0+ asks you to trust a third-party tap before installing its casks — that's the middle line.</p>
   </div>
@@ -1036,15 +1036,15 @@ brew install --cask <span class="g">cloister</span></pre>
   for(var _ll in LEGAL){ if(T[_ll]){ for(var _lk in LEGAL[_ll]){ T[_ll][_lk] = LEGAL[_ll][_lk]; } } }
   // Go-live (2026-08): "Coming soon" CTAs → Download; drop the "preview" line.
   var GOLIVE = {
-    ko:{ nav_get:"다운로드", hero_cta_get:"macOS용 다운로드", install_fine:"Homebrew 6.0+는 서드파티 tap의 캐스크를 설치하기 전에 신뢰를 요청합니다 — 가운데 줄이 그것입니다." },
-    ja:{ nav_get:"ダウンロード", hero_cta_get:"macOS 版をダウンロード", install_fine:"Homebrew 6.0+ はサードパーティ tap のカスクを入れる前に信頼を求めます — それが真ん中の行です。" },
-    "zh-Hans":{ nav_get:"下载", hero_cta_get:"下载 macOS 版", install_fine:"Homebrew 6.0+ 会在安装第三方 tap 的 cask 前要求信任 — 就是中间那行。" },
-    "zh-Hant":{ nav_get:"下載", hero_cta_get:"下載 macOS 版", install_fine:"Homebrew 6.0+ 會在安裝第三方 tap 的 cask 前要求信任 — 就是中間那行。" },
-    es:{ nav_get:"Descargar", hero_cta_get:"Descargar para macOS", install_fine:"Homebrew 6.0+ te pide confiar en un tap de terceros antes de instalar sus casks: esa es la línea del medio." },
-    fr:{ nav_get:"Télécharger", hero_cta_get:"Télécharger pour macOS", install_fine:"Homebrew 6.0+ vous demande de faire confiance à un tap tiers avant d'installer ses casks — c'est la ligne du milieu." },
-    de:{ nav_get:"Herunterladen", hero_cta_get:"Für macOS herunterladen", install_fine:"Homebrew 6.0+ bittet dich, einem Drittanbieter-Tap zu vertrauen, bevor du seine Casks installierst — das ist die mittlere Zeile." },
-    "pt-BR":{ nav_get:"Baixar", hero_cta_get:"Baixar para macOS", install_fine:"O Homebrew 6.0+ pede que você confie em um tap de terceiros antes de instalar seus casks — é a linha do meio." },
-    it:{ nav_get:"Scarica", hero_cta_get:"Scarica per macOS", install_fine:"Homebrew 6.0+ ti chiede di fidarti di un tap di terze parti prima di installarne i cask — è la riga di mezzo." }
+    ko:{ nav_get:"다운로드", hero_cta_get:"macOS용 다운로드", install_h2:"받아서 바로 시작.", install_comment:"# 또는 Homebrew — 한 번에:", install_fine:"Homebrew 6.0+는 서드파티 tap의 캐스크를 설치하기 전에 신뢰를 요청합니다 — 가운데 줄이 그것입니다." },
+    ja:{ nav_get:"ダウンロード", hero_cta_get:"macOS 版をダウンロード", install_h2:"ダウンロードしてすぐ。", install_comment:"# または Homebrew — 一括で：", install_fine:"Homebrew 6.0+ はサードパーティ tap のカスクを入れる前に信頼を求めます — それが真ん中の行です。" },
+    "zh-Hans":{ nav_get:"下载", hero_cta_get:"下载 macOS 版", install_h2:"下载即用。", install_comment:"# 或用 Homebrew — 一条命令：", install_fine:"Homebrew 6.0+ 会在安装第三方 tap 的 cask 前要求信任 — 就是中间那行。" },
+    "zh-Hant":{ nav_get:"下載", hero_cta_get:"下載 macOS 版", install_h2:"下載即用。", install_comment:"# 或用 Homebrew — 一條命令：", install_fine:"Homebrew 6.0+ 會在安裝第三方 tap 的 cask 前要求信任 — 就是中間那行。" },
+    es:{ nav_get:"Descargar", hero_cta_get:"Descargar para macOS", install_h2:"Descárgalo y listo.", install_comment:"# o con Homebrew — un solo comando:", install_fine:"Homebrew 6.0+ te pide confiar en un tap de terceros antes de instalar sus casks: esa es la línea del medio." },
+    fr:{ nav_get:"Télécharger", hero_cta_get:"Télécharger pour macOS", install_h2:"Téléchargez, c'est parti.", install_comment:"# ou avec Homebrew — une seule commande :", install_fine:"Homebrew 6.0+ vous demande de faire confiance à un tap tiers avant d'installer ses casks — c'est la ligne du milieu." },
+    de:{ nav_get:"Herunterladen", hero_cta_get:"Für macOS herunterladen", install_h2:"Laden und loslegen.", install_comment:"# oder mit Homebrew — ein Befehl:", install_fine:"Homebrew 6.0+ bittet dich, einem Drittanbieter-Tap zu vertrauen, bevor du seine Casks installierst — das ist die mittlere Zeile." },
+    "pt-BR":{ nav_get:"Baixar", hero_cta_get:"Baixar para macOS", install_h2:"Baixe e pronto.", install_comment:"# ou com Homebrew — um comando:", install_fine:"O Homebrew 6.0+ pede que você confie em um tap de terceiros antes de instalar seus casks — é a linha do meio." },
+    it:{ nav_get:"Scarica", hero_cta_get:"Scarica per macOS", install_h2:"Scarica e via.", install_comment:"# oppure con Homebrew — un comando:", install_fine:"Homebrew 6.0+ ti chiede di fidarti di un tap di terze parti prima di installarne i cask — è la riga di mezzo." }
   };
   for(var _gk in GOLIVE){ if(T[_gk]){ for(var _gg in GOLIVE[_gk]){ T[_gk][_gg] = GOLIVE[_gk][_gg]; } } }
   var docTitle = { en:"Cloister — A quiet cloister for focused work", ko:"Cloister — 고요한 회랑에서 집중하는 시간",
