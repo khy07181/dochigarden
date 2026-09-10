@@ -7,6 +7,9 @@ Static site, no build step. Deployed to Cloudflare Pages (output directory: repo
 ```
 /index.html        homepage (the "garden")
 /cloister/         Cloister landing page (index.html, og.png, images/)
+/functions/        Cloudflare Pages Functions (file-based routing)
+  cloister/download.js   /cloister/download → 302 to the latest public DMG
+                         on GitHub Releases (the landing's DMG button)
 ```
 
 Each product lives under its own path (e.g. `dochigarden.com/cloister`). Add new
