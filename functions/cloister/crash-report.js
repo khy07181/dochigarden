@@ -99,14 +99,19 @@ export async function handleRequest(request, env, fetchImpl = fetch) {
   if (!checked.ok) return json(400, { ok: false, error: checked.error });
 
   const to = env.CRASH_REPORT_TO || DEFAULT_TO;
-  const upstream = await fetchImpl(
-    `https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/email/sending/send`,
-    {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${env.CF_EMAIL_API_TOKEN}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify(buildEmail(checked.value, to)),
-    },
-  );
+  let upstream;
+  try {
+    upstream = await fetchImpl(
+      `https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/email/sending/send`,
+      {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${env.CF_EMAIL_API_TOKEN}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify(buildEmail(checked.value, to)),
+      },
+    );
+  } catch {
+    return json(502, { ok: false });
+  }
   if (!upstream.ok) return json(502, { ok: false });
   return json(202, { ok: true });
 }

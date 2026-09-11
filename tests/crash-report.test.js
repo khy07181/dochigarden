@@ -104,6 +104,12 @@ test('handleRequest: 502 when the email API fails', async () => {
   assert.deepEqual(await res.json(), { ok: false });
 });
 
+test('handleRequest: 502 when the email API call itself rejects', async () => {
+  const res = await handleRequest(post(JSON.stringify(sample())), env, async () => { throw new TypeError('fetch failed'); });
+  assert.equal(res.status, 502);
+  assert.deepEqual(await res.json(), { ok: false });
+});
+
 test('handleRequest: default recipient is support@dochigarden.com', async () => {
   let body;
   await handleRequest(post(JSON.stringify(sample())), { CF_ACCOUNT_ID: 'a', CF_EMAIL_API_TOKEN: 't' },
