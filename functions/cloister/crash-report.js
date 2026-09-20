@@ -123,8 +123,12 @@ export async function handleRequest(request, env, fetchImpl = fetch) {
     // Only the email API's own error codes/messages are read and logged — the
     // report itself is never logged or stored.
     const detail = await describeUpstreamFailure(upstream);
-    console.error(`crash-report relay: email API answered ${upstream.status}:`, detail);
-    return json(UPSTREAM_FAILURE_STATUS, { ok: false, stage: 'send', upstream: upstream.status, detail });
+    // Which recipient was used, without printing the address itself. On the
+    // Workers Free plan `default` is a dead end: support@ is a routing
+    // address, and only verified destination addresses can receive.
+    const recipient = to === DEFAULT_TO ? 'default' : 'configured';
+    console.error(`crash-report relay: email API answered ${upstream.status} (recipient: ${recipient}):`, detail);
+    return json(UPSTREAM_FAILURE_STATUS, { ok: false, stage: 'send', upstream: upstream.status, detail, recipient });
   }
   return json(202, { ok: true });
 }

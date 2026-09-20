@@ -107,7 +107,18 @@ test('handleRequest: 503 with the upstream detail when the email API fails', asy
     stage: 'send',
     upstream: 403,
     detail: '10000: Authentication error',
+    recipient: 'configured',
   });
+});
+
+test('handleRequest: a failure without CRASH_REPORT_TO reports the default recipient', async () => {
+  const body = JSON.stringify({ success: false, errors: [{ code: 10203, message: 'email.sending.error.email.sending_disabled' }] });
+  const res = await handleRequest(
+    post(JSON.stringify(sample())),
+    { CF_ACCOUNT_ID: 'acct', CF_EMAIL_API_TOKEN: 'tok' },
+    async () => new Response(body, { status: 403 }),
+  );
+  assert.equal((await res.json()).recipient, 'default');
 });
 
 test('handleRequest: 503 when the email API call itself rejects', async () => {
