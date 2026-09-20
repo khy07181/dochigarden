@@ -98,16 +98,22 @@ test('handleRequest: 202 when the email API accepts, forwarding to CRASH_REPORT_
   assert.equal(JSON.parse(seen.init.body).to, 'inbox@example.com');
 });
 
-test('handleRequest: 502 when the email API fails', async () => {
-  const res = await handleRequest(post(JSON.stringify(sample())), env, async () => new Response('nope', { status: 500 }));
-  assert.equal(res.status, 502);
-  assert.deepEqual(await res.json(), { ok: false });
+test('handleRequest: 503 with the upstream detail when the email API fails', async () => {
+  const body = JSON.stringify({ success: false, errors: [{ code: 10000, message: 'Authentication error' }] });
+  const res = await handleRequest(post(JSON.stringify(sample())), env, async () => new Response(body, { status: 403 }));
+  assert.equal(res.status, 503);
+  assert.deepEqual(await res.json(), {
+    ok: false,
+    stage: 'send',
+    upstream: 403,
+    detail: '10000: Authentication error',
+  });
 });
 
-test('handleRequest: 502 when the email API call itself rejects', async () => {
+test('handleRequest: 503 when the email API call itself rejects', async () => {
   const res = await handleRequest(post(JSON.stringify(sample())), env, async () => { throw new TypeError('fetch failed'); });
-  assert.equal(res.status, 502);
-  assert.deepEqual(await res.json(), { ok: false });
+  assert.equal(res.status, 503);
+  assert.deepEqual(await res.json(), { ok: false, stage: 'fetch' });
 });
 
 test('handleRequest: default recipient is support@dochigarden.com', async () => {

@@ -10,6 +10,10 @@ const MAX_COMMENT_CHARS = 2000;
 const MAX_EMAIL_CHARS = 254;
 const FROM = { address: 'crash-reports@dochigarden.com', name: 'Cloister Crash Reports' };
 const DEFAULT_TO = 'support@dochigarden.com';
+// Cloudflare's edge replaces a 502 body with its own "error code: 502" page,
+// which hides why a send failed. 503 passes the JSON through untouched and
+// the app treats every 5xx the same way (keep the report, retry next launch).
+const UPSTREAM_FAILURE_STATUS = 503;
 const ALLOWED_KEYS = new Set(['schema', 'reportID', 'app', 'os', 'model', 'sentAutomatically', 'comment', 'email', 'report']);
 const SEMVER = /^\d+\.\d+\.\d+$/;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -109,11 +113,32 @@ export async function handleRequest(request, env, fetchImpl = fetch) {
         body: JSON.stringify(buildEmail(checked.value, to)),
       },
     );
-  } catch {
-    return json(502, { ok: false });
+  } catch (error) {
+    // Network-level failure reaching the email API. The message names the
+    // cause, never the report.
+    console.error('crash-report relay: email API unreachable:', String(error));
+    return json(UPSTREAM_FAILURE_STATUS, { ok: false, stage: 'fetch' });
   }
-  if (!upstream.ok) return json(502, { ok: false });
+  if (!upstream.ok) {
+    // Only the email API's own error codes/messages are read and logged — the
+    // report itself is never logged or stored.
+    const detail = await describeUpstreamFailure(upstream);
+    console.error(`crash-report relay: email API answered ${upstream.status}:`, detail);
+    return json(UPSTREAM_FAILURE_STATUS, { ok: false, stage: 'send', upstream: upstream.status, detail });
+  }
   return json(202, { ok: true });
+}
+
+/** The email API's `errors` array as a short string, for logs and the response. */
+async function describeUpstreamFailure(upstream) {
+  try {
+    const body = await upstream.json();
+    const errors = Array.isArray(body?.errors) ? body.errors : [];
+    if (errors.length === 0) return 'no error detail';
+    return errors.map((e) => `${e?.code ?? '?'}: ${e?.message ?? '?'}`).join('; ').slice(0, 300);
+  } catch {
+    return 'unreadable error body';
+  }
 }
 
 export const onRequest = (context) =>
