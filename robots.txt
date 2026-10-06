@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# 블로그(dochigarden.com/blog)는 khy07181/khy07181.github.io 저장소에서 Cloudflare Worker로 배포된다.
+Sitemap: https://dochigarden.com/blog/sitemap.xml

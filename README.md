@@ -6,6 +6,8 @@ Static site, no build step. Deployed to Cloudflare Pages (output directory: repo
 
 ```
 /index.html        homepage (the "garden")
+/robots.txt        points crawlers at the blog sitemap (dochigarden.com/blog is a separate
+                   Cloudflare Worker deployed from khy07181/khy07181.github.io)
 /cloister/         Cloister landing page (index.html, og.png, images/)
 /functions/        Cloudflare Pages Functions (file-based routing)
   cloister/download.js   /cloister/download → 302 to the latest public DMG
