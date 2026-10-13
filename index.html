@@ -6,7 +6,8 @@
 <title>dochigarden — a small garden of calm Mac software</title>
 <meta name="description" content="dochigarden — a small studio growing calm, native software for the Mac.">
 <meta name="theme-color" content="#F4EFE3">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235E7A52' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 21V10'/%3E%3Cpath d='M12 13c0-3 2-5 5-5 0 3-2 5-5 5z'/%3E%3Cpath d='M12 15c0-3-2-5-5-5 0 3 2 5 5 5z'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <style>
   *{margin:0;box-sizing:border-box}
   :root{--paper:#F4EFE3;--ink:#34382C;--soft:#6E7A5E;--leaf:#5E7A52;--leaf2:#3F5537;--line:#DED6C2;
@@ -16,7 +17,7 @@
   body{background:var(--paper);color:var(--ink);font-family:var(--sans);
     display:flex;flex-direction:column;align-items:center;justify-content:center;
     min-height:100vh;padding:64px 24px;text-align:center;}
-  .sprout{width:46px;height:46px;margin-bottom:28px;color:var(--leaf);}
+  .logo{width:auto;height:clamp(48px,9vw,64px);margin-bottom:24px;}
   .mark{font-family:var(--serif);font-size:clamp(40px,7.5vw,62px);font-weight:600;letter-spacing:-.015em;}
   .mark .g{color:var(--leaf);font-style:italic;}
   .tag{margin-top:20px;color:var(--soft);font-size:clamp(16px,2.4vw,20px);max-width:38ch;line-height:1.55;}
@@ -28,8 +29,9 @@
 </style>
 </head>
 <body>
-  <svg class="sprout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <path d="M12 21V10"/><path d="M12 13c0-3 2-5 5-5 0 3-2 5-5 5z"/><path d="M12 15c0-3-2-5-5-5 0 3 2 5 5 5z"/>
+  <svg class="logo" viewBox="0 0 108 46" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <g fill="var(--ink)" stroke="var(--ink)"><path d="M16 43A26 26 0 0 1 68 43ZM12.89 35.74L3.19 33.32M17.13 26.22L8.84 20.63M24.37 18.73L18.49 10.64M33.73 14.16L30.97 4.55M44.09 13.07L44.79 3.1M54.2 15.59L58.27 6.46M62.84 21.42L69.79 14.23M68.96 29.85L77.95 25.47" fill="none" stroke-width="3.2"/><circle cx="55" cy="32" r="2.6" stroke="none"/></g>
+    <g stroke="var(--leaf)"><path d="M97 43L97 25.4M97 30.2C97 25.4 100.2 22.2 105 22.2C105 27 101.8 30.2 97 30.2ZM97 33.4C97 28.6 93.8 25.4 89 25.4C89 30.2 92.2 33.4 97 33.4Z" fill="none" stroke-width="3.2"/></g>
   </svg>
   <div class="mark">dochi<span class="g">garden</span></div>
   <p class="tag">A small studio growing calm, native software for the Mac.</p>

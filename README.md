@@ -8,6 +8,11 @@ Static site, no build step. Deployed to Cloudflare Pages (output directory: repo
 /index.html        homepage (the "garden")
 /robots.txt        points crawlers at the blog sitemap (dochigarden.com/blog is a separate
                    Cloudflare Worker deployed from khy07181/khy07181.github.io)
+/favicon.svg       studio favicon (hedgehog only; follows the tab's light/dark theme)
+/apple-touch-icon.png
+/brand/            dochigarden logo — a hedgehog (dochi) watching a sprout (garden).
+                   mark (light / dark / one-colour), square avatar, and build.py, which
+                   regenerates every SVG above; PNG commands are in its docstring
 /cloister/         Cloister landing page (index.html, og.png, images/)
 /functions/        Cloudflare Pages Functions (file-based routing)
   cloister/download.js   /cloister/download → 302 to the latest public DMG
