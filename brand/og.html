@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<!-- 1200×630 link-preview card. Rendered to /og.png (and, with ?label=blog, the blog's card)
+     by `python3 brand/build.py --export`. -->
+<html><head><meta charset="utf-8">
+<style>
+  @font-face{font-family:"Newsreader";font-weight:600;font-style:normal;src:url(fonts/newsreader-latin-600-normal.woff2) format("woff2")}
+  @font-face{font-family:"Newsreader";font-weight:600;font-style:italic;src:url(fonts/newsreader-latin-600-italic.woff2) format("woff2")}
+  *{margin:0;box-sizing:border-box}
+  html,body{width:1200px;height:630px;overflow:hidden}
+  body{background:#F4EFE3;color:#34382C;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  img{height:150px;margin-bottom:44px}
+  .mark{font-family:"Newsreader";font-weight:600;font-size:132px;letter-spacing:-.015em;line-height:1}
+  .mark i{color:#5E7A52}
+  .label{margin-top:30px;font-family:"Newsreader";font-weight:600;font-size:44px;color:#6E7A5E;letter-spacing:.01em}
+  .label:empty{display:none}
+</style></head>
+<body>
+  <img src="dochigarden-mark.svg" alt="">
+  <div class="mark">dochi<i>garden</i></div>
+  <div class="label"></div>
+  <script>document.querySelector(".label").textContent = new URLSearchParams(location.search).get("label") || "";</script>
+</body></html>

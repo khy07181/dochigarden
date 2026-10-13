@@ -4,9 +4,10 @@ The mark: a hedgehog (dochi) — a half-circle body, one eye, eight spines set
 just off the body — watching a sprout (garden) grow in front of it.
 
     python3 brand/build.py            # SVGs only
-    python3 brand/build.py --export   # also PNG / JPG / WebP into brand/export/
-                                      # and /apple-touch-icon.png
-                                      # (brew install librsvg webp; sips ships with macOS)
+    python3 brand/build.py --export   # also PNG / JPG / WebP into brand/export/,
+                                      # /apple-touch-icon.png, /favicon.ico and /og.png
+                                      # (brew install librsvg webp; sips ships with macOS;
+                                      # og.png needs Google Chrome)
 """
 import math
 import subprocess
@@ -17,6 +18,7 @@ from pathlib import Path
 HERE = Path(__file__).parent
 INK, LEAF, PAPER, LEAF_LIGHT = "#34382C", "#5E7A52", "#F4EFE3", "#9DB58C"
 DARK = "#23271E"                                # JPG backdrop for the dark mark
+CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 
 
 def n(v):
@@ -88,6 +90,10 @@ files = {
     HERE.parent / "favicon.svg": svg("0 0 16 16",
         '<style>.h{fill:%s;stroke:%s}@media (prefers-color-scheme:dark){.h{fill:%s;stroke:%s}}</style>'
         % (INK, INK, PAPER, PAPER) + f'<g class="h">{favicon_hog()}</g>'),
+    # /favicon.ico can't follow the theme, so it sits on a paper tile instead
+    HERE / "favicon-ico.svg": svg("0 0 16 16",
+        f'<rect width="16" height="16" rx="3.5" fill="{PAPER}"/>'
+        f'<g fill="{INK}" stroke="{INK}" transform="translate(1.4 1.2) scale(0.82)">{favicon_hog()}</g>'),
 }
 for path, text in files.items():
     path.write_text(text)
@@ -101,6 +107,18 @@ EXPORTS = {
     "dochigarden-avatar": (1024, None),
     "dochigarden-icon-round": (1024, None),
 }
+
+
+def write_ico(pngs, path):
+    """Pack PNGs into an .ico (PNG-in-ICO, read by every current browser)."""
+    import struct
+    blobs = [(size, Path(png).read_bytes()) for size, png in pngs]
+    head = struct.pack("<HHH", 0, 1, len(blobs))
+    offset, entries = 6 + 16 * len(blobs), b""
+    for size, data in blobs:
+        entries += struct.pack("<BBBBHHII", size % 256, size % 256, 0, 0, 1, 32, len(data), offset)
+        offset += len(data)
+    path.write_bytes(head + entries + b"".join(d for _, d in blobs))
 
 
 def run(*cmd):
@@ -122,3 +140,18 @@ if "--export" in sys.argv:
             print("wrote", f.relative_to(HERE.parent))
     run("rsvg-convert", "-w", "180", str(HERE / "apple-touch-icon.svg"), "-o", str(HERE.parent / "apple-touch-icon.png"))
     print("wrote apple-touch-icon.png")
+    with tempfile.TemporaryDirectory() as tmp:
+        pngs = []
+        for size in (16, 32, 48):
+            png = f"{tmp}/{size}.png"
+            run("rsvg-convert", "-w", str(size), str(HERE / "favicon-ico.svg"), "-o", png)
+            pngs.append((size, png))
+        write_ico(pngs, HERE.parent / "favicon.ico")
+    print("wrote favicon.ico")
+    # link-preview card: brand/og.html is laid out in HTML so the wordmark uses
+    # the bundled Newsreader (brand/fonts, OFL) — headless Chrome shoots it
+    for target, query in ((HERE.parent / "og.png", ""), (out / "dochigarden-og-blog.png", "?label=blog")):
+        run(CHROME, "--headless", "--disable-gpu", "--hide-scrollbars", "--force-device-scale-factor=1",
+            "--window-size=1200,630", "--virtual-time-budget=3000",
+            f"--screenshot={target}", (HERE / "og.html").resolve().as_uri() + query)
+        print("wrote", target.relative_to(HERE.parent))
