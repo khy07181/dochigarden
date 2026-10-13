@@ -3,16 +3,20 @@
 The mark: a hedgehog (dochi) — a half-circle body, one eye, eight spines set
 just off the body — watching a sprout (garden) grow in front of it.
 
-    python3 brand/build.py
-    # PNGs (needs rsvg-convert: brew install librsvg)
-    rsvg-convert -w 1024 brand/dochigarden-avatar.svg -o brand/dochigarden-avatar.png
-    rsvg-convert -w 180  brand/apple-touch-icon.svg   -o apple-touch-icon.png
+    python3 brand/build.py            # SVGs only
+    python3 brand/build.py --export   # also PNG / JPG / WebP into brand/export/
+                                      # and /apple-touch-icon.png
+                                      # (brew install librsvg webp; sips ships with macOS)
 """
 import math
+import subprocess
+import sys
+import tempfile
 from pathlib import Path
 
 HERE = Path(__file__).parent
 INK, LEAF, PAPER, LEAF_LIGHT = "#34382C", "#5E7A52", "#F4EFE3", "#9DB58C"
+DARK = "#23271E"                                # JPG backdrop for the dark mark
 
 
 def n(v):
@@ -71,6 +75,11 @@ files = {
     HERE / "dochigarden-avatar.svg": svg("0 0 120 120",
         f'<rect width="120" height="120" fill="{PAPER}"/>'
         f'<g transform="translate(6 39)">{colored(INK, LEAF)}</g>'),
+    # square, paper background, safe under a circular crop (Discord, Slack):
+    # the mark is shrunk to sit inside the circle and stroked heavier for 48px
+    HERE / "dochigarden-icon-round.svg": svg("0 0 120 120",
+        f'<rect width="120" height="120" fill="{PAPER}"/>'
+        f'<g transform="translate(16.8 41.6) scale(0.8)">{colored(INK, LEAF, sw=4.6, eye=3.4)}</g>'),
     # home-screen icon: heavier strokes so it survives 180px and below
     HERE / "apple-touch-icon.svg": svg("0 0 120 120",
         f'<rect width="120" height="120" fill="{PAPER}"/>'
@@ -83,3 +92,33 @@ files = {
 for path, text in files.items():
     path.write_text(text)
     print("wrote", path.relative_to(HERE.parent))
+
+# name → (width in px, JPG background; None when the SVG already has one)
+EXPORTS = {
+    "dochigarden-mark": (2048, PAPER),
+    "dochigarden-mark-dark": (2048, DARK),
+    "dochigarden-mark-ink": (2048, "#FFFFFF"),
+    "dochigarden-avatar": (1024, None),
+    "dochigarden-icon-round": (1024, None),
+}
+
+
+def run(*cmd):
+    subprocess.run(cmd, check=True, capture_output=True)
+
+
+if "--export" in sys.argv:
+    out = HERE / "export"
+    out.mkdir(exist_ok=True)
+    for name, (width, jpg_bg) in EXPORTS.items():
+        src = str(HERE / f"{name}.svg")
+        png, jpg, webp = (out / f"{name}.{ext}" for ext in ("png", "jpg", "webp"))
+        run("rsvg-convert", "-w", str(width), src, "-o", str(png))
+        run("cwebp", "-quiet", "-lossless", str(png), "-o", str(webp))
+        with tempfile.NamedTemporaryFile(suffix=".png") as flat:
+            run("rsvg-convert", "-w", str(width), *(["-b", jpg_bg] if jpg_bg else []), src, "-o", flat.name)
+            run("sips", "-s", "format", "jpeg", "-s", "formatOptions", "92", flat.name, "--out", str(jpg))
+        for f in (png, jpg, webp):
+            print("wrote", f.relative_to(HERE.parent))
+    run("rsvg-convert", "-w", "180", str(HERE / "apple-touch-icon.svg"), "-o", str(HERE.parent / "apple-touch-icon.png"))
+    print("wrote apple-touch-icon.png")

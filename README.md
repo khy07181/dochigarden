@@ -11,8 +11,9 @@ Static site, no build step. Deployed to Cloudflare Pages (output directory: repo
 /favicon.svg       studio favicon (hedgehog only; follows the tab's light/dark theme)
 /apple-touch-icon.png
 /brand/            dochigarden logo — a hedgehog (dochi) watching a sprout (garden).
-                   mark (light / dark / one-colour), square avatar, and build.py, which
-                   regenerates every SVG above; PNG commands are in its docstring
+                   mark (light / dark / one-colour), square avatar, circle-safe icon
+                   (Discord, Slack), and build.py, which regenerates every SVG above
+  export/          the same as PNG / JPG / WebP (`python3 brand/build.py --export`)
 /cloister/         Cloister landing page (index.html, og.png, images/)
 /functions/        Cloudflare Pages Functions (file-based routing)
   cloister/download.js   /cloister/download → 302 to the latest public DMG
