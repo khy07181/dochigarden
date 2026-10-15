@@ -1,6 +1,6 @@
 # dochigarden
 
-The website for **dochigarden.com** — a small garden of calm, native Mac software.
+The website for **dochigarden.com** — a small garden of calm, native software for Apple devices.
 
 Static site, no build step. Deployed to Cloudflare Pages (output directory: repo root).
 

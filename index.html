@@ -3,16 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>dochigarden — a small garden of calm Mac software</title>
-<meta name="description" content="dochigarden — a small studio growing calm, native software for the Mac.">
-<meta name="theme-color" content="#F4EFE3">
+<title>dochigarden — a small garden of calm Apple software</title>
+<meta name="description" content="dochigarden — a small studio growing calm, native software for Apple devices.">
+<meta name="theme-color" content="#F4EFE3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1E1B17" media="(prefers-color-scheme: dark)">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="canonical" href="https://dochigarden.com/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="dochigarden">
-<meta property="og:title" content="dochigarden — a small garden of calm Mac software">
-<meta property="og:description" content="A small studio growing calm, native software for the Mac.">
+<meta property="og:title" content="dochigarden — a small garden of calm Apple software">
+<meta property="og:description" content="A small studio growing calm, native software for Apple devices.">
 <meta property="og:url" content="https://dochigarden.com/">
 <meta property="og:image" content="https://dochigarden.com/og.png">
 <meta property="og:image:width" content="1200">
@@ -21,39 +22,73 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://dochigarden.com/og.png">
 <style>
+  /* paper/ink/leaf plus garden accents (clay, honey, rose, moss); dark mode is a warm "evening soil" */
   *{margin:0;box-sizing:border-box}
-  :root{--paper:#F4EFE3;--ink:#34382C;--soft:#6E7A5E;--leaf:#5E7A52;--leaf2:#3F5537;--line:#DED6C2;
+  :root{
+    --paper:#F4EFE3;--card:#FBF7EC;--ink:#34382C;--soft:#6E7A5E;--leaf:#5E7A52;--leaf2:#3F5537;--line:#DED6C2;
+    --clay:#A9582F;--clay-soft:#E9CDB9;--honey:#D9B25E;--honey-soft:#F2E3B8;--rose:#D4A28F;--moss:#8FA07A;
+    --grain:.05;
     --serif:ui-serif,"New York","Iowan Old Style",Palatino,Georgia,serif;
-    --sans:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;}
+    --sans:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --paper:#1E1B17;--card:#27231E;--ink:#EDE6D6;--soft:#B3AA97;--leaf:#A3BC8E;--leaf2:#C7D8B4;--line:#3A342B;
+      --clay:#E39C7C;--clay-soft:#45302A;--honey:#DDBB72;--honey-soft:#3B3324;--rose:#D9AE9C;--moss:#8C9A7A;
+      --grain:.08;color-scheme:dark;
+    }
+  }
   html,body{min-height:100%}
-  body{background:var(--paper);color:var(--ink);font-family:var(--sans);
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    min-height:100vh;padding:64px 24px;text-align:center;}
-  .logo{width:auto;height:clamp(48px,9vw,64px);margin-bottom:24px;}
-  /* the sprout grows once from its base on the ground line (97,43 in the mark's box) */
-  .logo .sprout{transform-box:view-box;transform-origin:97px 43px;animation:grow 1.4s cubic-bezier(.22,.8,.3,1) .3s both;}
+  body{background:var(--paper);color:var(--ink);font-family:var(--sans);transition:background-color .3s ease,color .3s ease}
+  /* paper grain, so the flat fill feels like paper */
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:var(--grain);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+  body>*{position:relative;z-index:1}
+  .wm{font-family:var(--serif);font-weight:600;letter-spacing:-.015em;text-decoration:none;color:var(--ink)}
+  .wm .g{color:var(--leaf);font-style:italic}
+
+
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+  body{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:64px 24px;text-align:center}
+  /* a soft morning sun behind the mark */
+  .sun{position:absolute;width:min(420px,80vw);aspect-ratio:1;border-radius:50%;top:50%;left:50%;transform:translate(-50%,-70%);
+    background:radial-gradient(circle,color-mix(in srgb,var(--honey) 22%,transparent),transparent 68%);pointer-events:none;z-index:0}
+  .logo{height:clamp(48px,9vw,64px);margin-bottom:24px}
+  .logo .sprout{transform-box:view-box;transform-origin:97px 43px;animation:grow 1.4s cubic-bezier(.22,.8,.3,1) .3s both}
   @keyframes grow{from{transform:scale(.15);opacity:0}40%{opacity:1}to{transform:none;opacity:1}}
-  @media(prefers-reduced-motion:reduce){.logo .sprout{animation:none}}
-  .mark{font-family:var(--serif);font-size:clamp(40px,7.5vw,62px);font-weight:600;letter-spacing:-.015em;}
-  .mark .g{color:var(--leaf);font-style:italic;}
-  .tag{margin-top:20px;color:var(--soft);font-size:clamp(16px,2.4vw,20px);max-width:38ch;line-height:1.55;}
-  .cta{margin-top:40px;}
-  .cta a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--leaf2);
-    font-weight:600;font-size:17px;border-bottom:1.5px solid var(--line);padding-bottom:3px;transition:border-color .18s ease;}
-  .cta a:hover{border-color:var(--leaf);}
-  footer{margin-top:58px;color:var(--soft);font-size:13px;letter-spacing:.01em;line-height:1.9;}
-  footer a{color:inherit;text-decoration:none;border-bottom:1px solid var(--line);transition:border-color .18s ease;}
-  footer a:hover{border-color:var(--leaf);}
+  .wm.big{font-size:clamp(40px,7.5vw,62px)}
+  .tag{margin-top:20px;color:var(--soft);font-size:clamp(16px,2.4vw,20px);max-width:38ch;line-height:1.55}
+
+  .links{margin-top:40px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+  .links a{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:var(--leaf2);font-weight:600;font-size:16px;
+    padding:12px 20px 12px 16px;border:1.5px solid var(--line);border-radius:999px;background:color-mix(in srgb,var(--card) 70%,transparent);
+    transition:border-color .18s ease,transform .18s ease,color .18s ease}
+  .links a:hover{transform:translateY(-1px)}
+  .links a.apps:hover{border-color:var(--leaf)}
+  .links a.blog:hover{border-color:var(--clay);color:var(--clay)}
+  .links svg{width:18px;height:18px}
+  .links .apps svg{color:var(--leaf)}
+  .links .blog svg{color:var(--clay)}
+
+  footer{margin-top:58px;color:var(--soft);font-size:13px;letter-spacing:.01em;line-height:1.9}
+  footer a{color:inherit;text-decoration:none;border-bottom:1px solid var(--line);transition:border-color .18s ease}
+  footer a:hover{border-color:var(--clay)}
 </style>
 </head>
 <body>
+  <div class="sun" aria-hidden="true"></div>
   <svg class="logo" viewBox="0 0 108 46" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
     <g fill="var(--ink)" stroke="var(--ink)"><path d="M16 43A26 26 0 0 1 68 43ZM12.89 35.74L3.19 33.32M17.13 26.22L8.84 20.63M24.37 18.73L18.49 10.64M33.73 14.16L30.97 4.55M44.09 13.07L44.79 3.1M54.2 15.59L58.27 6.46M62.84 21.42L69.79 14.23M68.96 29.85L77.95 25.47" fill="none" stroke-width="3.2"/><circle cx="55" cy="32" r="2.6" stroke="none"/></g>
     <g class="sprout" stroke="var(--leaf)"><path d="M97 43L97 25.4M97 30.2C97 25.4 100.2 22.2 105 22.2C105 27 101.8 30.2 97 30.2ZM97 33.4C97 28.6 93.8 25.4 89 25.4C89 30.2 92.2 33.4 97 33.4Z" fill="none" stroke-width="3.2"/></g>
   </svg>
-  <div class="mark">dochi<span class="g">garden</span></div>
-  <p class="tag">A small studio growing calm, native software for the Mac.</p>
-  <div class="cta"><a href="/apps/">See the apps →</a></div>
+  <div class="wm big">dochi<span class="g">garden</span></div>
+  <p class="tag">A small studio growing calm, native software for Apple devices.</p>
+  <nav class="links">
+    <a class="apps" href="/apps/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V11M12 13c0-3 2-5 5-5 0 3-2 5-5 5ZM12 15c0-3-2-5-5-5 0 3 2 5 5 5Z"/></svg>Apps →</a>
+    <a class="blog" href="/blog/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4.5h10.5L19 8v11.5H5Z"/><path d="M8.5 10h7M8.5 13.5h7M8.5 17h4"/></svg>Blog →</a>
+  </nav>
   <footer>Made with care by 도치 · Dochi<br><a href="mailto:hello@dochigarden.com">hello@dochigarden.com</a></footer>
 </body>
 </html>
