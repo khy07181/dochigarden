@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Not found — dochigarden</title>
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#F4EFE3">
+<meta name="theme-color" content="#F4EFE3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1E1B17" media="(prefers-color-scheme: dark)">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <style>
@@ -13,6 +14,9 @@
   :root{--paper:#F4EFE3;--ink:#34382C;--soft:#6E7A5E;--leaf:#5E7A52;--leaf2:#3F5537;--line:#DED6C2;
     --serif:ui-serif,"New York","Iowan Old Style",Palatino,Georgia,serif;
     --sans:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;}
+  @media (prefers-color-scheme:dark){
+    :root{--paper:#1E1B17;--ink:#EDE6D6;--soft:#B3AA97;--leaf:#A3BC8E;--leaf2:#C7D8B4;--line:#3A342B;color-scheme:dark;}
+  }
   html,body{min-height:100%}
   body{background:var(--paper);color:var(--ink);font-family:var(--sans);
     display:flex;flex-direction:column;align-items:center;justify-content:center;
