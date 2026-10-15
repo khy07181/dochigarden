@@ -9,6 +9,8 @@ Static site, no build step. Deployed to Cloudflare Pages (output directory: repo
 /robots.txt        points crawlers at the blog sitemap (dochigarden.com/blog is a separate
                    Cloudflare Worker deployed from khy07181/khy07181.github.io)
 /404.html          not-found page (Pages serves it for any unmatched path)
+/theme.js          light/dark toggle for the studio pages; follows the system until a
+                   visitor picks one, then remembers it (localStorage)
 /favicon.svg       studio favicon (hedgehog only; follows the tab's light/dark theme)
 /favicon.ico       the same on a paper tile, for crawlers and older clients
 /apple-touch-icon.png

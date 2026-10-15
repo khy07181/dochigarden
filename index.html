@@ -7,6 +7,7 @@
 <meta name="description" content="dochigarden — a small studio growing calm, native software for Apple devices.">
 <meta name="theme-color" content="#F4EFE3" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#1E1B17" media="(prefers-color-scheme: dark)">
+<script src="/theme.js"></script>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="canonical" href="https://dochigarden.com/">
@@ -32,12 +33,18 @@
     --sans:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;
     color-scheme:light;
   }
+  /* dark follows the system unless the toggle (/theme.js) has set data-theme */
   @media (prefers-color-scheme:dark){
-    :root{
+    :root:not([data-theme="light"]){
       --paper:#1E1B17;--card:#27231E;--ink:#EDE6D6;--soft:#B3AA97;--leaf:#A3BC8E;--leaf2:#C7D8B4;--line:#3A342B;
       --clay:#E39C7C;--clay-soft:#45302A;--honey:#DDBB72;--honey-soft:#3B3324;--rose:#D9AE9C;--moss:#8C9A7A;
       --grain:.08;color-scheme:dark;
     }
+  }
+  :root[data-theme="dark"]{
+    --paper:#1E1B17;--card:#27231E;--ink:#EDE6D6;--soft:#B3AA97;--leaf:#A3BC8E;--leaf2:#C7D8B4;--line:#3A342B;
+    --clay:#E39C7C;--clay-soft:#45302A;--honey:#DDBB72;--honey-soft:#3B3324;--rose:#D9AE9C;--moss:#8C9A7A;
+    --grain:.08;color-scheme:dark;
   }
   html,body{min-height:100%}
   body{background:var(--paper);color:var(--ink);font-family:var(--sans);transition:background-color .3s ease,color .3s ease}
